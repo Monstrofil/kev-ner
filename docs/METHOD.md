@@ -2,7 +2,7 @@
 
 This is the method record for `span-bakeoff/`: where the architecture came from, what we built and why,
 every fix that moved a number, and how to reproduce each result. The result tables live in
-[`README.md`](README.md). This file explains how they were reached.
+[`README.md`](../README.md). This file explains how they were reached.
 
 ## 1. Starting point: Jev / "System One" → kev
 
@@ -22,7 +22,7 @@ reproduction **kev-0.5b** fills them in, and we took these pieces from it:
 and the answer is a substring of the input. It can't be malformed JSON or an invented value. That one
 change turns kev's classifier into an extractor.
 
-## 2. kev-span: one span or null per field (`kev_span.py`)
+## 2. kev-span: one span or null per field (`kev/span.py`)
 
 ```
 [ document tokens ............ ] [\n<|fim_prefix|>date: … <|fim_suffix|>] [\n<|fim_prefix|>number: … <|fim_suffix|>] …
@@ -49,7 +49,7 @@ change turns kev's classifier into an extractor.
 - **Training.** Cross-entropy on start and end, with `ignore_index` for unknowable targets. AdamW, heads
   at 5× the LoRA learning rate (2e-4), OneCycle schedule, 12 epochs.
 
-**Data.** `pull.py 21` freezes a production training run from talpa (schema, current gold, the run's
+**Data.** `scripts/pull.py 21` freezes a production training run from talpa (schema, current gold, the run's
 held-out collections as eval, and the released generative model's eval dump as baseline). The run is
 `header_metadata`, with 9 fields: dates, numbers, ordinals, a place and a free-text subject. Two whole
 training collections are carved off as dev, so nothing is tuned on eval. The held-out-collections split
@@ -65,10 +65,10 @@ is the only generalisation measure.
 
 Also along the way:
 - The pulled baseline `pred` holds only the *wrong* fields, so the rest take their value from gold.
-- Row ids come in two formats (`sha#sN` / `sha:N`), so `pull.py` splits on the 64-hex prefix.
+- Row ids come in two formats (`sha#sN` / `sha:N`), so `scripts/pull.py` splits on the 64-hex prefix.
 
 **Gold review.** Every eval mismatch (kev's and the baseline's) was read against the text. 13 gold
-problems are recorded in `adjudications/run-21.json`, local only and never written back. The review also
+problems are recorded in [`adjudications/run-21.json`](../adjudications/run-21.json), local only and never written back. The review also
 surfaced a **scorer bug**: `SequenceMatcher`'s default `autojunk=True` scores long strings near 0. It is
 reported, not fixed here.
 
@@ -77,13 +77,13 @@ reported, not fixed here.
 - It runs at 52 ms per unit on an H100.
 - It cannot emit invalid JSON or invent a value, and both are baseline failure modes.
 
-## 3. kev-ner: many spans per type (`kev_ner.py`)
+## 3. kev-ner: many spans per type (`kev/ner.py`)
 
 NER breaks one assumption: a sentence can hold *several* PERs. So the readout changes from "one span or
 null" to "a set of spans". Everything else is kept: packing, mask, restarted positions, the isolation
 assert, LoRA r16, and one forward pass for all types.
 
-**Benchmark.** `universalner/uner_llm_inst_english`. `uner.py` strips the LLM instruction wrapper back
+**Benchmark.** `universalner/uner_llm_inst_english`. `kev/uner.py` strips the LLM instruction wrapper back
 to the sentence plus character-offset entities, and asserts `text[Start:End] == Text` for every entity.
 5 entities with a null `Text` (the dataset's own conversion bug) are dropped. The branch descriptions
 are the dataset's own instruction wording (e.g. `ORG: organization; organizations can represent other
@@ -119,7 +119,7 @@ score(t,i,w) = q_t · rep(i, w) / √256  +  bias_t          (q_t, bias_t from <
 - A **gold round-trip oracle** fed gold through kev's decoder and through the BIO decoder. Both score
   F1 ≈ 0.99 on both test sets, so the decoding and scoring are sound and the two approaches share one ceiling.
 - About 1% of gold is unreachable for kev because its edge falls inside a Qwen token (14/1076 EWT, 7/1071 PUD).
-- **Reference model:** `encoder_ner.py`, a RoBERTa-large BIO token classifier (5 epochs, lr 2e-5), scored
+- **Reference model:** `baselines/encoder_ner.py`, a RoBERTa-large BIO token classifier (5 epochs, lr 2e-5), scored
   by the same scorer. **Published reference:** XLM-R-large fine-tuned on en_ewt, UNER paper (Mayhew et al.,
   NAACL 2024, Fig. 4): EWT 0.858, PUD 0.805.
 
@@ -180,14 +180,14 @@ unseen in training.
 ## 6. What the model reads and emits (raw)
 
 kev-ner writes **no text and no JSON**. It reads one token sequence and returns one tensor of scores;
-a few lines of Python turn that into character spans. `show_io.py` dumps each stage for any sentence;
+a few lines of Python turn that into character spans. `scripts/show_io.py` dumps each stage for any sentence;
 [`io-example.txt`](io-example.txt) is the full dump below, from the trained Qwen3-4B bidir model on a PUD test
 sentence.
 
 ```bash
-python show_io.py out/ner-kev-q3-4b-bidir --base Qwen/Qwen3-4B-Base --bidir-doc --threshold -2.0 \
+python -m scripts.show_io results/ner-kev-q3-4b-bidir --base Qwen/Qwen3-4B-Base --bidir-doc --threshold -2.0 \
   --text "According to Parker, Russian Secret Service agents are active in large numbers in Great Britain."
-# needs the run's adapter/ + head.pt: modal volume get kev-ner ner-kev-q3-4b-bidir/ out/
+# needs the run's adapter/ + head.pt: modal volume get kev-ner ner-kev-q3-4b-bidir/ results/
 ```
 
 **Input: one packed token sequence.** It holds the sentence and then one branch per type from the
@@ -234,7 +234,7 @@ logit -10.26  p=0.000  ORG  tokens  2..6               'Parker, Russian Secret S
 logit -12.50  p=0.000  ORG  tokens  5..6               'Secret Service'        ← too short
 ```
 
-**Decode: plain Python (`kev_ner.decode`), no model.** It keeps logits above the dev-tuned threshold
+**Decode: plain Python (`kev.ner.decode`), no model.** It keeps logits above the dev-tuned threshold
 (−2.0), best first, and drops overlaps:
 
 ```
@@ -250,12 +250,12 @@ logit -12.50  p=0.000  ORG  tokens  5..6               'Secret Service'        �
 | can fail by | broken JSON, invented or paraphrased text, wrong offsets | only a wrong or missing span; output is always a substring of the input |
 | confidence | none directly | a probability for every candidate span |
 
-Any JSON a consumer sees is built afterwards from these offsets. The run-21 extractor (`kev_span.py`) is
+Any JSON a consumer sees is built afterwards from these offsets. The run-21 extractor (`kev/span.py`) is
 the same idea with one start and one end pointer per field plus a null slot, instead of the span grid.
 
 ## 7. Follow-ups: layer cutting, few-shot descriptions, long documents, zero-shot, composed conversion
 
-### Cutting the top layers (`kev_ner.py --keep-layers N`)
+### Cutting the top layers (`kev.ner --keep-layers N`)
 
 Only the backbone's first N decoder layers run; the top ones mostly serve next-token prediction.
 Qwen3-4B bidir on UNER, one seed each; the bootstrap is against the full 36 layers.
@@ -278,7 +278,7 @@ Full data: 0.856 / 0.834, no change, at 145 vs 214 sent/s, because the packed le
 training sentences (`--train-limit 500 --batch 8 --epochs 10`): 0.723 / 0.765 against 0.758 / 0.773
 without examples; EWT −0.035 [−0.057, −0.013]. Dropped.
 
-### Long documents (`long_docs.py`, `long_eval.py`, `kev_ner.py --long-train`)
+### Long documents (`kev/long_docs.py`, `scripts/long_eval.py`, `kev.ner --long-train`)
 
 UNER test sentences are joined into documents of about N Qwen tokens, carrying gold offsets along. Every
 length holds the same entities. kev reads a document in one pass. RoBERTa reads it in 512-token windows
@@ -306,7 +306,7 @@ Each cell is EWT / PUD F1.
 - **RoBERTa is still faster** (3 500–9 400/s, 5.6 GB), but about 12 points lower. It too was trained on
   sentences only; windows holding many sentences are new to it, so part of its drop is the same effect.
 
-### Zero- and few-shot on unseen types (`zs_data.py`, `kev_zs.py`)
+### Zero- and few-shot on unseen types (`scripts/zs_data.py`, `kev/zero_shot.py`)
 
 One epoch on **Pile-NER** (45k passages, about 13k LLM-labelled open types; 31 min on an H100), then
 datasets whose types it never trained on. The type **name** is the only schema. The threshold was picked
@@ -331,16 +331,16 @@ The published numbers are from the GLiNER paper, Table 1.
   That no-Pile arm uses a fixed threshold of 0 with no dev set, so it is somewhat pessimistic. The gap
   is still the story.
 - **Incomplete.** CrossNER science and MIT movie/restaurant didn't finish: the GPU provider stopped the
-  run partway. These numbers were recovered from the run log (`out/zs-q3b-keep24/report.json`).
+  run partway. These numbers were recovered from the run log ([`results/zs-q3b-keep24/report.json`](../results/zs-q3b-keep24/report.json)).
 
-### Composed conversion: the value built from user-declared parts (`kev_compose.py`)
+### Composed conversion: the value built from user-declared parts (`archive/compose.py`)
 
 The fixed normaliser only reads what its rules know: `dateparser`, digits and Roman numerals. It cannot read
 «шістдесят другої сесії» (62). And because gold is aligned to the text by the same rules, **75
 training values were dropped as unfindable**: 31 `session_no`, 27 `parent_date`, 12 `convocation_no`,
 5 `date`.
 
-`rules/run-21.json` declares, per field, the **parts** (each a set of options), a **gold** pattern that
+`archive/rules/run-21.json` declares, per field, the **parts** (each a set of options), a **gold** pattern that
 splits a gold value into parts, and an **output** template:
 
 ```json
@@ -363,7 +363,7 @@ beats their best options plus a bias tuned on dev. The span branches still train
 | convocation_no | 11/20 | **20/20** | 17/20 | 57/59 | 55/59 | 57/59 |
 
 *gated*: the parts give the value, but only when the span readout is non-null (computed offline from
-`parts.json`).
+[`results/compose-1.5b/parts.json`](../results/compose-1.5b/parts.json)).
 
 - **Dev** is two whole training collections the model never trained on. Only the compose bias was tuned
   on it. The fixed path fails there:
@@ -390,40 +390,41 @@ parts (tens and ones) instead of 150 whole numbers.
 
 ## 8. Reproduce
 
-```bash
-cd experiments/span-bakeoff
+Run from the repository root (every entry point is a module: `python -m kev.ner`, `python -m scripts.show_io`, …).
 
+```bash
 # run 21 (production fields, held-out collections)
-uv run --no-project --with httpx python pull.py 21          # needs talpa access
+python -m scripts.pull 21 --ground <store-url>                    # needs talpa access
 modal run modal_app.py::main --only kev-                           # kev-0.5b, kev-1.5b
 
 # Universal NER English
+mkdir -p data/uner
 for f in uner-en_ewt-train uner-en_ewt-dev uner-en_ewt-test uner-en_pud-test; do
   curl -sL -o data/uner/$f.jsonl \
     https://huggingface.co/datasets/universalner/uner_llm_inst_english/resolve/main/$f.jsonl
 done
-python uner.py data/uner fixtures/uner-en.json
+python -m kev.uner data/uner fixtures/uner-en.json
 modal run modal_app.py::main --only ner-                           # all kev-ner variants + RoBERTa
 modal run modal_app.py::main --only ner-kev-q3-4b-bidir            # just the winner
-modal volume get kev-ner ner-kev-q3-4b-bidir/ out/   # adapter, head.pt, predictions, report
+modal volume get kev-ner ner-kev-q3-4b-bidir/ results/   # adapter, head.pt, predictions, report
 ```
 
 The winning configuration, in full:
 
 ```bash
-python kev_ner.py fixtures/uner-en.json --out out/ner-kev-q3-4b-bidir \
+python -m kev.ner fixtures/uner-en.json --out results/ner-kev-q3-4b-bidir \
   --base Qwen/Qwen3-4B-Base --bidir-doc --grad-ckpt \
   --rank 16 --epochs 4 --batch 32 --lr 2e-4 --max-width 16 --max-doc 256 --seed 0
 ```
 
 | file | role |
 |---|---|
-| `kev_span.py` | single-span-or-null extractor (run 21) |
-| `kev_ner.py` | multi-span NER variant (`--keep-layers`, `--examples`, `--train-limit`) |
-| `kev_compose.py`, `rules/run-21.json` | composed conversion: typed values built from user-declared parts (§7) |
-| `encoder_ner.py` | RoBERTa BIO reference |
-| `gliner_span.py` | GLiNER reference (run 21; 0.567, dropped) |
-| `uner.py` | UNER fixture builder + entity-level scorer |
-| `show_io.py`, `io-example.txt` | raw input / mask / output-tensor / decode dump for one sentence (§6) |
-| `pull.py`, `common.py`, `review.py`, `adjudications/` | run-21 fixture, scoring, gold review |
-| `modal_app.py` | every run, parallel on H100s; outputs on the `kev-span` volume |
+| `kev/span.py` | single-span-or-null extractor (run 21) |
+| `kev/ner.py` | multi-span NER variant (`--keep-layers`, `--examples`, `--train-limit`) |
+| `archive/compose.py`, `archive/rules/run-21.json` | composed conversion: typed values built from user-declared parts (§7) |
+| `baselines/encoder_ner.py` | RoBERTa BIO reference |
+| `baselines/gliner_span.py` | GLiNER reference (run 21; 0.567, dropped) |
+| `kev/uner.py` | UNER fixture builder + entity-level scorer |
+| `scripts/show_io.py`, `docs/io-example.txt` | raw input / mask / output-tensor / decode dump for one sentence (§6) |
+| `scripts/pull.py`, `kev/field_task.py`, `scripts/review.py`, `adjudications/` | run-21 fixture, scoring, gold review |
+| `modal_app.py` | every run, parallel on H100s; outputs on the `kev-ner` volume |

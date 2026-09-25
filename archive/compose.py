@@ -93,7 +93,7 @@ class ComposePacked(Packed):
 
 
 def collate(batch: list[ComposePacked], pad_id: int, dtype: torch.dtype) -> dict:
-    """As ``kev_span.collate``, with the part branches appended after the field branches."""
+    """As ``kev.span.collate``, with the part branches appended after the field branches."""
     n_fields, n_parts = len(batch[0].fields), len(batch[0].parts)
     n_opts = max(len(p.options) for p in batch[0].parts)
     max_doc = max(len(p.doc_ids) for p in batch)

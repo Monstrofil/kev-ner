@@ -18,7 +18,8 @@ in a single forward pass**. Every answer is a **pointer into your document**, ne
 Think of it as **System One for extraction**. TypeSafe's **Jev** ("System One" models) answers typed
 questions in one pass by pointing at option markers, and **kev-0.5b** is its open reproduction.
 kev-ner points at the **document's own tokens** instead, and a classifier becomes an extractor.
-The single-span field variant is `kev_span.py`; the multi-entity NER variant is `kev_ner.py`.
+The single-span field variant is [`kev/span.py`](kev/span.py); the multi-entity NER variant is
+[`kev/ner.py`](kev/ner.py).
 
 ```
 [ document tokens ............ ] [\n<|fim_prefix|>PER: person<|fim_suffix|>] [\n<|fim_prefix|>ORG: …<|fim_suffix|>] …
@@ -30,8 +31,8 @@ The single-span field variant is `kev_span.py`; the multi-entity NER variant is 
   document.
 - **Readout.** The hidden state at each branch's last token (`<|fim_suffix|>`, Qwen's reserved FIM
   token reused as a "decide" marker) scores document spans.
-  - **Fields (`kev_span.py`):** start and end pointers plus a null slot for "not printed".
-  - **NER (`kev_ner.py`):** every span up to 16 tokens gets a score, and spans above a threshold are
+  - **Fields (`kev/span.py`):** start and end pointers plus a null slot for "not printed".
+  - **NER (`kev/ner.py`):** every span up to 16 tokens gets a score, and spans above a threshold are
     kept.
 - **Backbone:** a frozen Qwen decoder plus LoRA r16. `--bidir-doc` makes the document part attend in both
   directions.
@@ -39,8 +40,8 @@ The single-span field variant is `kev_span.py`; the multi-entity NER variant is 
   numerals.
 
 Raw input, the attention mask and the output tensor for one sentence are in
-[`io-example.txt`](io-example.txt). The full walkthrough is in [`METHOD.md`](METHOD.md). The results
-page with interactive heatmaps is [`results.html`](results.html); download it and open it locally.
+[`docs/io-example.txt`](docs/io-example.txt). The full walkthrough is in [`docs/METHOD.md`](docs/METHOD.md). The
+results page with interactive heatmaps is [`docs/results.html`](docs/results.html); download it and open it locally.
 
 ## Results at a glance
 
@@ -59,7 +60,7 @@ fields are dates, numbers, ordinals, a place and a free-text subject.
 | GLiNER multi-v2.1, fine-tuned | 0.567 | 0.580 | 90 |
 
 The baseline makes errors kev can't make: invalid JSON (6 units), invented dates, and subjects
-translated to English. The gold review (`adjudications/`) found 13 gold problems.
+translated to English. The gold review ([`adjudications/`](adjudications/)) found 13 gold problems.
 
 ### 2. Universal NER English: exact span + type, micro F1
 
@@ -128,14 +129,14 @@ The published numbers are from the GLiNER paper, Table 1.
   That no-Pile arm uses a fixed threshold of 0 with no dev set, so it is somewhat pessimistic. The gap
   is still the story.
 - **Incomplete.** CrossNER science and MIT movie/restaurant didn't finish: the GPU provider stopped the
-  run partway. These numbers were recovered from the run log (`out/zs-q3b-keep24/report.json`).
+  run partway. These numbers were recovered from the run log ([`results/zs-q3b-keep24/report.json`](results/zs-q3b-keep24/report.json)).
 
 ### 6. Tried and dropped: composing typed values from declared parts
 
-`kev_compose.py` builds typed values from parts the user declares, instead of a fixed normaliser: day,
+[`archive/compose.py`](archive/compose.py) builds typed values from parts the user declares, instead of a fixed normaliser: day,
 month and year as choices, and a template for the output. Where numbers are printed as words it wins
 (`шістдесят другої сесії` → 62). But a choice can assert a value that isn't printed, and 173 training
-units carry a strong December prior. Kept only as a record; see `METHOD.md` §7.
+units carry a strong December prior. Kept only as a record; see [`docs/METHOD.md`](docs/METHOD.md) §7.
 
 ## How it relates to prior work
 
@@ -149,36 +150,66 @@ lightly.
 - **MRC-NER** (Li et al., 2020) has a query per type and start/end pointers, but runs one pass per type.
 - **LLM2Vec** and **LS-unLLaMA** make decoders bidirectional.
 
+## Quickstart
+
+Python 3.10+. Every entry point is a module, run from the repository root:
+
+```bash
+pip install -e .                     # torch, transformers, peft, …
+pip install -e ".[baselines,modal]"  # optional: GLiNER baseline, Modal launcher
+
+python -m kev.ner --help             # the NER model: train, evaluate, write results/<run>/
+python -m scripts.build_page > docs/results.html   # rebuild the results page from results/
+```
+
+Training needs a GPU; every reported run was launched through [`modal_app.py`](modal_app.py).
+
 ## Reproduce
 
 ```bash
 # data (third-party datasets are not redistributed here)
 mkdir -p data/uner && for f in uner-en_ewt-train uner-en_ewt-dev uner-en_ewt-test uner-en_pud-test; do
   curl -sL -o data/uner/$f.jsonl https://huggingface.co/datasets/universalner/uner_llm_inst_english/resolve/main/$f.jsonl; done
-python uner.py data/uner fixtures/uner-en.json
-python long_docs.py fixtures/uner-en.json fixtures/uner-long.json
-# zero-shot data: see the header of zs_data.py (Pile-NER from HF, CrossNER from GitHub, MIT from CSAIL)
-python zs_data.py data/zs fixtures/zs.json
+python -m kev.uner data/uner fixtures/uner-en.json
+python -m kev.long_docs fixtures/uner-en.json fixtures/uner-long.json
+# zero-shot data: see the header of scripts/zs_data.py (Pile-NER from HF, CrossNER from GitHub, MIT from CSAIL)
+python -m scripts.zs_data data/zs fixtures/zs.json
 
 modal run modal_app.py::main --only ner-q3b-keep24       # any run name, or a prefix
 ```
 
-Every run is listed in `RUNS` in [`modal_app.py`](modal_app.py). `out/<run>/report.json` and
+Every run is listed in `RUNS` in [`modal_app.py`](modal_app.py). `results/<run>/report.json` and
 `predictions.json` hold the numbers behind every table above. Weights are not included.
 
-| file | what it is |
-|---|---|
-| `kev_span.py` | one span or null per field (the production task) |
-| `kev_ner.py` | many spans per type; `--bidir-doc`, `--keep-layers`, `--examples`, `--long-train` |
-| `kev_zs.py`, `zs_data.py` | Pile-NER pretraining, then zero- and few-shot on unseen types |
-| `long_docs.py`, `long_eval.py` | long-document fixture and one-pass evaluation |
-| `encoder_ner.py` | RoBERTa-large BIO baseline (with 512-token windows for long documents) |
-| `gliner_span.py` | GLiNER baseline |
-| `kev_compose.py`, `rules/` | the dropped composed-conversion experiment |
-| `show_io.py`, `show_span_io.py`, `build_page.py` | raw I/O dumps and the results page |
-| `common.py`, `scoring.py`, `uner.py` | splits, normalisers and scorers |
-| `fixtures/run-21.json`, `adjudications/` | the production field task and its gold review |
-| `pull.py`, `review.py` | how that fixture was pulled and reviewed (needs the private store) |
+## Repository layout
+
+```
+kev/                  the model package
+  ner.py              many spans per type; --bidir-doc, --keep-layers, --examples, --long-train
+  span.py             one span or null per field (the production task)
+  zero_shot.py        Pile-NER pretraining, then zero- and few-shot on unseen types
+  field_task.py       field-task split, per-type normalisers, scoring and report
+  scoring.py          vendored field scorer (the one the generative baseline is judged with)
+  uner.py             Universal NER fixture builder and entity-level scorer
+  long_docs.py        joins sentences into long documents
+baselines/
+  encoder_ner.py      RoBERTa-large BIO tagger (with 512-token windows for long documents)
+  gliner_span.py      GLiNER, fine-tuned
+scripts/
+  zs_data.py          zero-/few-shot fixture (Pile-NER, CrossNER, MIT)
+  long_eval.py        one-pass evaluation of a trained run on long documents
+  show_io.py          raw input, mask and output tensor for a kev-ner run
+  show_span_io.py     the same for a kev-span run
+  build_page.py       renders docs/results.html from results/
+  pull.py, review.py  how the production fixture was pulled and reviewed (needs the private store)
+archive/
+  compose.py, rules/  the dropped composed-conversion experiment
+fixtures/run-21.json  the production field task
+adjudications/        its gold review
+results/<run>/        report.json (+ predictions.json) for every run
+docs/                 METHOD.md, results.html (+ the older report.html), io-example.txt
+modal_app.py          launches every run on Modal GPUs
+```
 
 Built in an afternoon-ish of back-and-forth with Claude. Numbers are single-seed unless a bootstrap is
 quoted.
