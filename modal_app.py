@@ -81,10 +81,10 @@ image = (
     .add_local_file(HERE / REVIEW, f"/work/{REVIEW}")
 )
 
-app = modal.App("kev-span", image=image)
-hf_cache = modal.Volume.from_name("kev-span-hf-cache", create_if_missing=True)
-# Trained weights + reports persist here: `modal volume get kev-span <run>/ out/`.
-outputs = modal.Volume.from_name("kev-span", create_if_missing=True)
+app = modal.App("kev-ner", image=image)
+hf_cache = modal.Volume.from_name("kev-ner-hf-cache", create_if_missing=True)
+# Trained weights + reports persist here: `modal volume get kev-ner <run>/ out/`.
+outputs = modal.Volume.from_name("kev-ner", create_if_missing=True)
 # GPU is fixed on the decorator at import time; override per invocation via BAKEOFF_GPU.
 GPU = os.environ.get("BAKEOFF_GPU", "H100")
 

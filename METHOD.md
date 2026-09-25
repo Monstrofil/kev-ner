@@ -187,7 +187,7 @@ sentence.
 ```bash
 python show_io.py out/ner-kev-q3-4b-bidir --base Qwen/Qwen3-4B-Base --bidir-doc --threshold -2.0 \
   --text "According to Parker, Russian Secret Service agents are active in large numbers in Great Britain."
-# needs the run's adapter/ + head.pt: modal volume get kev-span ner-kev-q3-4b-bidir/ out/
+# needs the run's adapter/ + head.pt: modal volume get kev-ner ner-kev-q3-4b-bidir/ out/
 ```
 
 **Input: one packed token sequence.** It holds the sentence and then one branch per type from the
@@ -405,7 +405,7 @@ done
 python uner.py data/uner fixtures/uner-en.json
 modal run modal_app.py::main --only ner-                           # all kev-ner variants + RoBERTa
 modal run modal_app.py::main --only ner-kev-q3-4b-bidir            # just the winner
-modal volume get kev-span ner-kev-q3-4b-bidir/ out/   # adapter, head.pt, predictions, report
+modal volume get kev-ner ner-kev-q3-4b-bidir/ out/   # adapter, head.pt, predictions, report
 ```
 
 The winning configuration, in full:
