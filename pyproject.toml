@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "kev-ner"
+version = "0.1.0"
+description = "One-pass span extraction with a decoder LLM: every field and entity type answered by pointing at the document."
+readme = "README.md"
+requires-python = ">=3.10"
+# Versions are the ones the reported runs used (see the Modal image in modal_app.py).
+dependencies = [
+    "torch>=2.4",
+    "transformers>=4.51.3",
+    "peft>=0.15.2",
+    "accelerate>=1.6.0",
+    "dateparser",
+    "roman",
+    "rapidfuzz",
+]
+
+[project.optional-dependencies]
+baselines = ["gliner==0.2.29"]
+modal = ["modal"]
+pull = ["httpx"]
+
+[tool.setuptools.packages.find]
+include = ["kev*"]
