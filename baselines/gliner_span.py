@@ -4,7 +4,7 @@ Every schema field is a label; one encoder pass per text window scores all spans
 Per field the best span over all windows wins if it clears a threshold picked on the dev collections
 (else null), then the field TYPE's normaliser turns it into the typed value.
 
-    python gliner_span.py fixtures/run-21.json --out out/gliner --languages uk --dev tsrada.gov.ua uzmr.gov.ua
+    python -m baselines.gliner_span fixtures/run-21.json --out results/gliner --languages uk --dev tsrada.gov.ua uzmr.gov.ua
 """
 
 from __future__ import annotations
@@ -20,7 +20,7 @@ import torch
 from gliner import GLiNER
 from gliner.data_processing import WordsSplitter
 
-from common import align, accuracy, ece, field_ok, normalise, plain, report, split
+from kev.field_task import align, accuracy, ece, field_ok, normalise, plain, report, split
 
 SPLITTER = WordsSplitter("whitespace")
 

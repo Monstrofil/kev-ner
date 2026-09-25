@@ -4,7 +4,7 @@ The run pins the labeling task (typed schema), the held-out documents (``eval_sh
 produced; its eval dump lists every held-out unit with any wrong field (``pred`` null on invalid JSON).
 A unit absent from the dump was right on every field, so its baseline is the gold.
 
-    uv run --no-project --with httpx python pull.py 21
+    python -m scripts.pull 21 --ground <store-url>
 """
 
 from __future__ import annotations
@@ -18,7 +18,7 @@ from urllib.parse import quote
 
 import httpx
 
-HERE = Path(__file__).resolve().parent
+ROOT = Path(__file__).resolve().parents[1]
 PAGE_SIZE = 1000
 # The baseline's prediction when its generation did not parse — wrong even where gold is null.
 INVALID_OUTPUT = "<invalid output>"
@@ -113,7 +113,7 @@ def main() -> None:
     parser.add_argument("--workers", type=int, default=16)
     args = parser.parse_args()
 
-    out_dir = HERE / "fixtures"
+    out_dir = ROOT / "fixtures"
     out_dir.mkdir(exist_ok=True)
     with httpx.Client(base_url=args.ground, timeout=60) as client:
         for run_id in args.run_ids:

@@ -1,10 +1,10 @@
 """Render the shareable results + raw-I/O page from the run outputs (no hand-copied numbers).
 
-    python build_page.py > results.html
+    python -m scripts.build_page > docs/results.html
 
-Reads out/ner-*/report.json + predictions.json, out/{kev-0.5b,kev-1.5b,gliner-ft}/report.json,
-out/ner-io.json (show_io.py --json), out/span-io.json (show_span_io.py), out/llm-format-example.json,
-fixtures/uner-en.json.
+Reads results/ner-*/report.json + predictions.json, results/{kev-0.5b,kev-1.5b,gliner-ft}/report.json,
+results/ner-io.json (show_io.py --json), results/span-io.json (show_span_io.py),
+results/llm-format-example.json, fixtures/uner-en.json, fixtures/run-21.json and docs/page.css.
 """
 
 from __future__ import annotations
@@ -14,7 +14,8 @@ import random
 from html import escape
 from pathlib import Path
 
-OUT = Path("out")
+ROOT = Path(__file__).resolve().parents[1]
+OUT = ROOT / "results"
 load = lambda p: json.loads(Path(p).read_text(encoding="utf-8"))
 
 NER_RUNS = [  # (run, label, highlight)
@@ -53,8 +54,7 @@ def marked(text: str, spans: list[list], cls: str = "") -> str:
     return "".join(out)
 
 
-# ---------------------------------------------------------------- data
-fx = load("fixtures/uner-en.json")
+fx = load(ROOT / "fixtures" / "uner-en.json")
 reports = {r: load(OUT / r / "report.json") for r, _, _ in NER_RUNS}
 preds = {r: load(OUT / r / "predictions.json") for r in ("ner-kev-q3-4b-bidir", "ner-roberta-large")}
 io = load(OUT / "ner-io.json")
@@ -66,7 +66,7 @@ rob = reports["ner-roberta-large"]
 
 
 def bootstrap(a: str, b: str, split: str, n: int = 1000) -> tuple[float, float, float]:
-    from uner import score
+    from kev.uner import score
     units = fx["splits"][split]
     pa, pb = load(OUT / a / "predictions.json")[split], load(OUT / b / "predictions.json")[split]
     rng = random.Random(0)
@@ -102,7 +102,6 @@ def categorise(split: str) -> tuple[dict, dict]:
     return counts, examples
 
 
-# ---------------------------------------------------------------- sections
 def ner_table() -> str:
     rows = []
     for run, label, hi in NER_RUNS:
@@ -405,7 +404,6 @@ raw output: start and end logits, each of shape {u['logit_shape'][0]} × {u['log
 </div>"""
 
 
-# ---------------------------------------------------------------- page
 cats, cat_examples = {}, {"wrong_type": [], "boundary": [], "missed": [], "spurious": [], "exact": []}
 for split in ("ewt_test", "pud_test"):
     c, ex = categorise(split)
@@ -415,14 +413,14 @@ for split in ("ewt_test", "pud_test"):
 ex1, ex2, ex3, ex4 = io
 r21_main, r21_fields = run21_tables()
 branches = "".join(f'<li><code>{escape(t["name"])}: {escape(t["desc"])}</code></li>' for t in fx["types"])
-run21_fields = load("fixtures/run-21.json")["task"]["fields"]
+run21_fields = load(ROOT / "fixtures" / "run-21.json")["task"]["fields"]
 field_branches = "".join(f'<tr><td><code>{f["name"]}</code></td><td>{f["type"]}</td><td class="lt small">{escape(f["desc"])}</td></tr>'
                          for f in run21_fields)
 w_ewt, w_pud = win["results"]["ewt_test"]["micro"]["f1"], win["results"]["pud_test"]["micro"]["f1"]
 r_ewt, r_pud = rob["results"]["ewt_test"]["micro"]["f1"], rob["results"]["pud_test"]["micro"]["f1"]
 k15 = r21["kev-1.5b"]
 
-CSS = Path("page.css").read_text(encoding="utf-8")
+CSS = (ROOT / "docs" / "page.css").read_text(encoding="utf-8")
 print(f"""<title>kev Results &amp; Raw I/O</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -607,7 +605,7 @@ print(f"""<title>kev Results &amp; Raw I/O</title>
 </section>
 
 <footer>
-  <div>Code and full logs: <code>experiments/span-bakeoff/</code> (<code>kev_ner.py</code>, <code>kev_span.py</code>, <code>encoder_ner.py</code>, <code>show_io.py</code>, <code>show_span_io.py</code>). Method notes: <code>METHOD.md</code>.</div>
-  <div>Every number and example on this page is generated from the run outputs by <code>build_page.py</code>.</div>
+  <div>Code: <code>kev/ner.py</code>, <code>kev/span.py</code>, <code>baselines/encoder_ner.py</code>, <code>scripts/show_io.py</code>, <code>scripts/show_span_io.py</code>. Method notes: <code>docs/METHOD.md</code>.</div>
+  <div>Every number and example on this page is generated from the run outputs by <code>scripts/build_page.py</code>.</div>
 </footer>
 </div>""")

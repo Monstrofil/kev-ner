@@ -16,7 +16,7 @@ import dateparser
 import roman
 from rapidfuzz import fuzz
 
-from scoring import field_ok
+from kev.scoring import field_ok
 
 MARKUP = re.compile(r"<[^>]+>|\*+|#+|\|")
 NUMERIC_DATE = re.compile(r"\b\d{1,2}\s*[./-]\s*\d{1,2}\s*[./-]\s*\d{2,4}\b")
@@ -70,7 +70,6 @@ def adjudicated(ev: list[dict], path: Path) -> tuple[list[dict], list[set[str]]]
     return units, excluded
 
 
-# ---- per-TYPE normalisers: printed span -> typed value ----------------------------------------------
 
 def as_date(span: str, languages: list[str]) -> str | None:
     parsed = dateparser.parse(span, languages=languages, settings={"DATE_ORDER": "DMY", "STRICT_PARSING": True})
@@ -118,7 +117,6 @@ def align(field: dict, value, text: str, languages: list[str]) -> tuple[int, int
     return (hit.dest_start, hit.dest_end) if hit.score >= FUZZY_MIN else None
 
 
-# ---- scoring ---------------------------------------------------------------------------------------
 
 def accuracy(units: list[dict], preds: list[dict], fields: list[dict], excluded: list[set[str]] | None = None) -> dict:
     """Per-field accuracy, its mean, and the share of units with every scored field right."""

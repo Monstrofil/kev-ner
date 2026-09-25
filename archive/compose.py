@@ -1,5 +1,6 @@
-"""kev-span plus user-declared conversion: a typed field's value is ASSEMBLED from parts the rules declare,
-each a choice the model makes, instead of being parsed out of the printed span by a fixed normaliser.
+"""Archived, dropped experiment (docs/METHOD.md §7): kev-span plus user-declared conversion.
+
+A typed field's value is ASSEMBLED from parts the rules declare, each a choice the model makes, instead of being parsed out of the printed span by a fixed normaliser.
 
 A rules file (``--rules``) maps field name → parts, a gold pattern and an output template::
 
@@ -11,10 +12,10 @@ Each part is one more branch in the same packed pass, listing its options with a
 (``… 11<opt> 12<opt><decide>``, so under causal attention a marker has read its option): the ``<decide>``
 state points at the markers or a null slot — kev's own choice readout. The value is the output template
 over the chosen options. Gold parts come from the gold value through the ``gold`` pattern; a part the
-pattern leaves out trains nothing. The span branches still train as in ``kev_span.py``, so one model reports
+pattern leaves out trains nothing. The span branches still train as in ``kev.span``, so one model reports
 both readouts: the fixed normaliser over the span, and the composed parts.
 
-    python kev_compose.py fixtures/run-21.json rules/run-21.json --out out/compose --languages uk \
+    python -m archive.compose fixtures/run-21.json archive/rules/run-21.json --out results/compose --languages uk \
         --dev tsrada.gov.ua uzmr.gov.ua
 """
 
@@ -34,8 +35,8 @@ from peft import LoraConfig, get_peft_model
 from torch import nn
 from transformers import AutoModel, AutoTokenizer
 
-from common import accuracy, align, field_ok, plain, report, split
-from kev_span import DECIDE, FIELD_OPEN, IGNORE, Packed, PointerHeads, best_span, decide, fit_temperature, to
+from kev.field_task import accuracy, align, field_ok, plain, report, split
+from kev.span import DECIDE, FIELD_OPEN, IGNORE, Packed, PointerHeads, best_span, decide, fit_temperature, to
 
 OPTION = "<|fim_middle|>"
 

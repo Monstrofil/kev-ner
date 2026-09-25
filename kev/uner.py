@@ -4,7 +4,7 @@ The HF rows are LLM instructions; the sentence is the text after the prompt's la
 target lists ``{TypeName, Text, Start, End}`` in character offsets. Splits: EWT train / dev / test
 (web text) and PUD test (news + Wikipedia, a different source — the cross-source number).
 
-    python uner.py data/uner fixtures/uner-en.json      # jsonl files → one compact fixture
+    python -m kev.uner data/uner fixtures/uner-en.json      # jsonl files → one compact fixture
 """
 
 from __future__ import annotations

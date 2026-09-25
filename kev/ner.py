@@ -1,6 +1,6 @@
 """kev-span for flat multi-entity NER: every type answered in ONE forward pass, any number of spans each.
 
-Same packing as ``kev_span.py``: ``[document] [branch t1] [branch t2] ...`` with a branch per entity type
+Same packing as ``kev.span``: ``[document] [branch t1] [branch t2] ...`` with a branch per entity type
 (``<field> name: description <decide>``), a block mask so each branch sees the document and only
 itself, and branch positions restarting after the document. The readout changes from "one span or
 null" to "a set of spans": each ``<decide>`` state scores EVERY document span of up to ``--max-width``
@@ -19,7 +19,7 @@ training mentions to its description; ``--train-limit`` trains on a seeded subse
 documents of log-uniform length in [256, MAX] tokens, batched by ``--batch-tokens``; the threshold is then
 picked on dev sentences and dev documents together.
 
-    python kev_ner.py fixtures/uner-en.json --out out/kev-ner
+    python -m kev.ner fixtures/uner-en.json --out results/kev-ner
 """
 
 from __future__ import annotations
@@ -38,8 +38,8 @@ from peft import LoraConfig, get_peft_model
 from torch import nn
 from transformers import AutoModel, AutoTokenizer
 
-from long_docs import join, sizes_of
-from uner import line, score
+from kev.long_docs import join, sizes_of
+from kev.uner import line, score
 
 FIELD_OPEN, DECIDE = "<|fim_prefix|>", "<|fim_suffix|>"
 

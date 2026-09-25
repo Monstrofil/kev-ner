@@ -1,5 +1,5 @@
 """Zero- and few-shot kev-ner: train once on Pile-NER's open types, then read datasets whose types it never
-saw (``zs_data.py``), with the type names as the only schema.
+saw (``scripts/zs_data.py``), with the type names as the only schema.
 
 - **zero-shot**: the Pile-trained model on each test set; its threshold is picked on held-out Pile passages,
   never on a test set.
@@ -9,7 +9,7 @@ saw (``zs_data.py``), with the type names as the only schema.
 
 A unit's branches are its own types; a batch pads to its widest type list and masks the padding.
 
-    python kev_zs.py fixtures/zs.json --out out/zs --base Qwen/Qwen3-4B-Base --keep-layers 24 --bidir-doc
+    python -m kev.zero_shot fixtures/zs.json --out results/zs --base Qwen/Qwen3-4B-Base --keep-layers 24 --bidir-doc
 """
 
 from __future__ import annotations
@@ -27,7 +27,7 @@ import torch
 import torch.nn.functional as F
 from transformers import AutoTokenizer
 
-from kev_ner import KevNer, Packed, by_tokens, collate, decode, to
+from kev.ner import KevNer, Packed, by_tokens, collate, decode, to
 
 
 def micro(units: list[dict], preds: list[list]) -> dict:

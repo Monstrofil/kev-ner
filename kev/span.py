@@ -14,7 +14,7 @@ null): it cannot be malformed and cannot be invented. A per-TYPE normaliser then
 Backbone: a frozen decoder with LoRA (kev: Qwen2.5-0.5B, r16). Calibration: one temperature fitted on
 the dev collections (kev's recipe), reported as ECE on eval.
 
-    python kev_span.py fixtures/run-21.json --out out/kev --languages uk --dev tsrada.gov.ua uzmr.gov.ua
+    python -m kev.span fixtures/run-21.json --out results/kev --languages uk --dev tsrada.gov.ua uzmr.gov.ua
 """
 
 from __future__ import annotations
@@ -32,7 +32,7 @@ from peft import LoraConfig, get_peft_model
 from torch import nn
 from transformers import AutoModel, AutoTokenizer
 
-from common import accuracy, align, ece, field_ok, normalise, plain, report, split
+from kev.field_task import accuracy, align, ece, field_ok, normalise, plain, report, split
 
 # Reserved Qwen tokens reused as structure markers (kev does the same); user text is scrubbed of them.
 FIELD_OPEN, DECIDE = "<|fim_prefix|>", "<|fim_suffix|>"
