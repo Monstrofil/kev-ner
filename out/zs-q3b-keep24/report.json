@@ -1,0 +1,86 @@
+{
+ "contender": "kev-zs",
+ "status": "partial: the run was stopped by the provider after 4 of 7 datasets; numbers recovered from the run log",
+ "base": "Qwen/Qwen3-4B-Base",
+ "keep_layers": 24,
+ "bidir_doc": true,
+ "pile_train_sec": 1881,
+ "threshold": -1.25,
+ "pile_dev_f1": 0.6033,
+ "few_shot_sentences": 50,
+ "results": {
+  "crossner_ai": {
+   "zero_shot": {
+    "f1": 0.516,
+    "p": 0.525,
+    "r": 0.508
+   },
+   "few_shot": {
+    "f1": 0.7
+   },
+   "few_shot_no_pretrain": {
+    "f1": 0.0
+   }
+  },
+  "crossner_literature": {
+   "zero_shot": {
+    "f1": 0.454,
+    "p": 0.47,
+    "r": 0.44
+   },
+   "few_shot": {
+    "f1": 0.75
+   },
+   "few_shot_no_pretrain": {
+    "f1": 0.103
+   }
+  },
+  "crossner_music": {
+   "zero_shot": {
+    "f1": 0.594,
+    "p": 0.591,
+    "r": 0.598
+   },
+   "few_shot": {
+    "f1": 0.816
+   },
+   "few_shot_no_pretrain": {
+    "f1": 0.091
+   }
+  },
+  "crossner_politics": {
+   "zero_shot": {
+    "f1": 0.53,
+    "p": 0.52,
+    "r": 0.539
+   },
+   "few_shot": {
+    "f1": 0.779
+   },
+   "few_shot_no_pretrain": {
+    "f1": 0.019
+   }
+  }
+ },
+ "published_zero_shot_f1_pct": {
+  "source": "GLiNER paper (arXiv 2311.08526) Table 1",
+  "UniNER-7B": {
+   "crossner_ai": 53.6,
+   "crossner_literature": 59.3,
+   "crossner_music": 67.0,
+   "crossner_politics": 60.9,
+   "crossner_science": 61.1,
+   "mit_movie": 42.4,
+   "mit_restaurant": 31.7
+  },
+  "GLiNER-L": {
+   "crossner_ai": 57.2,
+   "crossner_literature": 64.4,
+   "crossner_music": 69.6,
+   "crossner_politics": 72.6,
+   "crossner_science": 62.6,
+   "mit_movie": 57.2,
+   "mit_restaurant": 42.9
+  }
+ }
+}

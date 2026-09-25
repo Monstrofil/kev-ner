@@ -1,0 +1,1047 @@
+{
+ "temperature": 2.5,
+ "bias": -1.0,
+ "units": [
+  {
+   "id": "03d0cef0f946",
+   "collection": "zhuravnenska-gromada.gov.ua",
+   "chars": 1628,
+   "doc_tokens": 878,
+   "packed_tokens": 1430,
+   "logit_shape": [
+    9,
+    879
+   ],
+   "text": "ЖУРАВНЕНСЬКА СЕЛИЩНА РАДА СТРИЙСЬКОГО РАЙОНУ ЛЬВІВСЬКОЇ ОБЛАСТІ РОЗПОРЯДЖЕННЯ СЕЛИЩНОГО ГОЛОВИ від «08» грудня 2025 р. с-ще Журавно № 253 Про скликання засідання 51-ої сесії Журавненської селищної ради VIII скликання Керуючись пунктом 8 частини 4 статті 42, частинами 4, 5, 10 статті 46 Закону України «Про місцеве самоврядування в Україні», Постановою Верховною Ради України від 8 жовтня 2025 року № 4621-IX «Про безперервність функціонування представницьких органів місцевого самоврядування (сільських, селищних, міських, районних у містах, районних, обласних рад, сільських, селищних, міських голів) в Україні в умовах збройної агресії російської федерації», на підставі статті 12 Регламенту Журавненської селищної ради VIII скликання, враховуючи рішення Журавненської селищної ради від 20 листопада 2025 року № 50-14 “Про надання дозволу на щорічну відпустку селищному голові” ЗОБОВ’ЯЗУЮ: 1. Скликати засідання 51-ої сесії Журавненської селищної ради VIІІ-го скликання 2020-2025 років 18 грудня 2025 року об 09.00 год. у приміщенні Журавненської селищної ради (пл. Степана Бандери, буд. 2, селище Журавно) з наступним порядком денним: 1. Про затвердження Програми підтримки діяльності і відкритості роботи Журавненської селищної ради та фінансового забезпечення для здійснення власних та делегованих повноважень на 2026 рік. 2. Про затвердження Програма виплат компенсації фізичним особам, які на",
+   "fields": [
+    {
+     "field": "date",
+     "type": "date",
+     "branch": "date: The date this section's OWN act bears, as ISO 8601 YYYY-MM-DD, from the line under its letterhead (usually after «від»). The month may be spelled as a word. Null if this section only references another act's date, or shows no date.",
+     "branch_tokens": 66,
+     "top_start": [
+      {
+       "token": 72,
+       "text": "0",
+       "p": 0.9613299037946584
+      },
+      {
+       "token": 108,
+       "text": "5",
+       "p": 0.010291509513256787
+      },
+      {
+       "token": 73,
+       "text": "8",
+       "p": 0.0045804536247365185
+      }
+     ],
+     "p_start_null": 0.0029399901705569635,
+     "p_end_null": 0.005789004651199166,
+     "best_span": {
+      "start_token": 72,
+      "end_token": 82,
+      "text": "08» грудня 2025",
+      "logp": -0.07929542660713196
+     },
+     "logp_null": -10.981143951416016,
+     "span_wins": true,
+     "value": "2025-12-08",
+     "confidence": 0.9237669787850438,
+     "gold": "2025-12-08",
+     "ok": true
+    },
+    {
+     "field": "number",
+     "type": "text",
+     "branch": "number: This section's OWN registration number as printed, without the «№» sign — digits plus any suffix the source attaches («62-2276/2025», «3095-53/VIII»). A blank placeholder (a run of underscores or dots) is null, not a guess. Null if this section only references another act's number.",
+     "branch_tokens": 84,
+     "top_start": [
+      {
+       "token": 94,
+       "text": "2",
+       "p": 0.9963888866096271
+      },
+      {
+       "token": 95,
+       "text": "5",
+       "p": 0.0019639132907642693
+      },
+      {
+       "token": 93,
+       "text": " ",
+       "p": 0.0002491328045163878
+      }
+     ],
+     "p_start_null": 0.0011313267460035144,
+     "p_end_null": 0.002142553961675446,
+     "best_span": {
+      "start_token": 94,
+      "end_token": 96,
+      "text": "253",
+      "logp": -0.007749715819954872
+     },
+     "logp_null": -12.930120468139648,
+     "span_wins": true,
+     "value": "253",
+     "confidence": 0.9922802358055529,
+     "gold": "253",
+     "ok": true
+    },
+    {
+     "field": "parent_date",
+     "type": "date",
+     "branch": "parent_date: The date of the act this section is attached to, as ISO 8601 YYYY-MM-DD, read from its «Додаток до …» / «ЗАТВЕРДЖЕНО …» / «СХВАЛЕНО …» line. Null when this section is the act itself.",
+     "branch_tokens": 74,
+     "top_start": [
+      {
+       "token": 614,
+       "text": "2",
+       "p": 0.002430743860890113
+      },
+      {
+       "token": 131,
+       "text": " VIII",
+       "p": 0.0013176724561750567
+      },
+      {
+       "token": 436,
+       "text": "2",
+       "p": 0.0012475543457730962
+      }
+     ],
+     "p_start_null": 0.9712438634555034,
+     "p_end_null": 0.9955624253300952,
+     "best_span": {
+      "start_token": 0,
+      "end_token": 85,
+      "text": "ЖУРАВНЕНСЬКА СЕЛИЩНА РАДА СТРИЙСЬКОГО РАЙОНУ ЛЬВІВСЬКОЇ ОБЛАСТІ РОЗПОРЯДЖЕННЯ СЕЛИЩНОГО ГОЛОВИ від «08» грудня 2025 р. с",
+      "logp": -14.537166595458984
+     },
+     "logp_null": -0.03362514451146126,
+     "span_wins": false,
+     "value": null,
+     "confidence": 0.9669338971892601,
+     "gold": null,
+     "ok": true
+    },
+    {
+     "field": "parent_number",
+     "type": "text",
+     "branch": "parent_number: The registration number of the act this section is attached to, as printed without the «№» sign. Null when this section is the act itself, or when the reference line leaves the number blank.",
+     "branch_tokens": 46,
+     "top_start": [
+      {
+       "token": 144,
+       "text": "8",
+       "p": 0.004948800957939754
+      },
+      {
+       "token": 131,
+       "text": " VIII",
+       "p": 0.004441283165490582
+      },
+      {
+       "token": 614,
+       "text": "2",
+       "p": 0.003779699783401752
+      }
+     ],
+     "p_start_null": 0.9255465627410205,
+     "p_end_null": 0.984611570412214,
+     "best_span": {
+      "start_token": 0,
+      "end_token": 91,
+      "text": "ЖУРАВНЕНСЬКА СЕЛИЩНА РАДА СТРИЙСЬКОГО РАЙОНУ ЛЬВІВСЬКОЇ ОБЛАСТІ РОЗПОРЯДЖЕННЯ СЕЛИЩНОГО ГОЛОВИ від «08» грудня 2025 р. с-ще Журавно",
+      "logp": -12.373275756835938
+     },
+     "logp_null": -0.09287890046834946,
+     "span_wins": false,
+     "value": null,
+     "confidence": 0.9113038520839095,
+     "gold": null,
+     "ok": true
+    },
+    {
+     "field": "annex_no",
+     "type": "text",
+     "branch": "annex_no: This section's own ordinal among the annexes, as printed — «Додаток №1» is 1, «Додаток 2.1» is 2.1. Null when the section is not numbered as an annex.",
+     "branch_tokens": 59,
+     "top_start": [
+      {
+       "token": 85,
+       "text": " с",
+       "p": 0.0010267931764039743
+      },
+      {
+       "token": 94,
+       "text": "2",
+       "p": 0.0006638613955386746
+      },
+      {
+       "token": 614,
+       "text": "2",
+       "p": 0.0006073038800757894
+      }
+     ],
+     "p_start_null": 0.9892757214946866,
+     "p_end_null": 0.9983976569650905,
+     "best_span": {
+      "start_token": 85,
+      "end_token": 131,
+      "text": " с-ще Журавно № 253 Про скликання засідання 51-ої сесії Журавненської селищної ради VIII",
+      "logp": -15.111577987670898
+     },
+     "logp_null": -0.01238582655787468,
+     "span_wins": false,
+     "value": null,
+     "confidence": 0.9876905620877975,
+     "gold": null,
+     "ok": true
+    },
+    {
+     "field": "session_no",
+     "type": "number",
+     "branch": "session_no: The ordinal of the sitting the act was taken at, as a bare integer — whether printed on this section or on the parent act it names. Words count: «шістдесят другої сесії» is 62.",
+     "branch_tokens": 56,
+     "top_start": [
+      {
+       "token": 108,
+       "text": "5",
+       "p": 0.7978719602360779
+      },
+      {
+       "token": 109,
+       "text": "1",
+       "p": 0.009679695097287725
+      },
+      {
+       "token": 72,
+       "text": "0",
+       "p": 0.0078111924283802555
+      }
+     ],
+     "p_start_null": 0.08958000279176247,
+     "p_end_null": 0.16682319869691561,
+     "best_span": {
+      "start_token": 108,
+      "end_token": 109,
+      "text": "51",
+      "logp": -0.49288779497146606
+     },
+     "logp_null": -4.203444004058838,
+     "span_wins": true,
+     "value": 51,
+     "confidence": 0.6108598067627232,
+     "gold": 51,
+     "ok": true
+    },
+    {
+     "field": "convocation_no",
+     "type": "number",
+     "branch": "convocation_no: The ordinal of the convocation, as a bare integer. Usually a Roman numeral: «VIII скликання» is 8.",
+     "branch_tokens": 36,
+     "top_start": [
+      {
+       "token": 144,
+       "text": "8",
+       "p": 0.9899648812417698
+      },
+      {
+       "token": 131,
+       "text": " VIII",
+       "p": 0.007720354939195557
+      },
+      {
+       "token": 223,
+       "text": "8",
+       "p": 0.0008367679834812786
+      }
+     ],
+     "p_start_null": 0.0004042920323285312,
+     "p_end_null": 0.00015012749623015235,
+     "best_span": {
+      "start_token": 144,
+      "end_token": 144,
+      "text": "8",
+      "logp": -0.012410072609782219
+     },
+     "logp_null": -16.617399215698242,
+     "span_wins": true,
+     "value": 8,
+     "confidence": 0.9876666147814755,
+     "gold": 8,
+     "ok": true
+    },
+    {
+     "field": "place",
+     "type": "text",
+     "branch": "place: The settlement line as printed, keeping its abbreviation exactly («м. Узина», «с. Студена», «селище Журавно»). Do not expand or normalise the abbreviation. Null if the section prints no settlement line — never derive one from the body's name.",
+     "branch_tokens": 68,
+     "top_start": [
+      {
+       "token": 85,
+       "text": " с",
+       "p": 0.9945159763163749
+      },
+      {
+       "token": 616,
+       "text": " с",
+       "p": 0.0018798565096415315
+      },
+      {
+       "token": 86,
+       "text": "-",
+       "p": 0.00044251073852473016
+      }
+     ],
+     "p_start_null": 0.0020237179894418214,
+     "p_end_null": 0.05407238900849598,
+     "best_span": {
+      "start_token": 85,
+      "end_token": 91,
+      "text": " с-ще Журавно",
+      "logp": -0.10813277214765549
+     },
+     "logp_null": -9.120250701904297,
+     "span_wins": true,
+     "value": "с-ще Журавно",
+     "confidence": 0.8975084243982003,
+     "gold": "с-ще Журавно",
+     "ok": true
+    },
+    {
+     "field": "subject",
+     "type": "text",
+     "branch": "subject: This section's own title — the «Про …» clause on an act, or the annex's own heading («Структура та штатна чисельність …»). One line, joined if it wraps. Null if the section has no title.",
+     "branch_tokens": 63,
+     "top_start": [
+      {
+       "token": 97,
+       "text": " Про",
+       "p": 0.9994378867088114
+      },
+      {
+       "token": 642,
+       "text": " Пр",
+       "p": 0.0001006923563586417
+      },
+      {
+       "token": 88,
+       "text": " Ж",
+       "p": 0.00010003060483770708
+      }
+     ],
+     "p_start_null": 1.6951695361287655e-05,
+     "p_end_null": 0.0031507502818247327,
+     "best_span": {
+      "start_token": 97,
+      "end_token": 130,
+      "text": " Про скликання засідання 51-ої сесії Журавненської селищної ради",
+      "logp": -0.14036762714385986
+     },
+     "logp_null": -16.745258331298828,
+     "span_wins": true,
+     "value": "Про скликання засідання 51-ої сесії Журавненської селищної ради",
+     "confidence": 0.8690386944532965,
+     "gold": "Про скликання засідання 51-ої сесії Журавненської селищної ради VIII скликання",
+     "ok": true
+    }
+   ]
+  },
+  {
+   "id": "0908aaa1501d",
+   "collection": "studenyanska-gromada.gov.ua",
+   "chars": 2300,
+   "doc_tokens": 1138,
+   "packed_tokens": 1690,
+   "logit_shape": [
+    9,
+    1139
+   ],
+   "text": "Додаток 2 розпорядження сільського голови від 13.05.2025 р. № 61 ПАСПОРТ набору даних, який підлягає оприлюдненню у формі відкритих даних № з/п Назва елементу паспорта набору даних Опис набору даних, необхідний для його ідентифікації та використання --- --- --- 1. Ідентифікаційний номер набору даних _(генерується автоматично_ _адміністратором Порталу_ _відкритих даних)_ 2. Найменування набору даних (до 254 символів) 3. Стислий опис змісту набору даних (до 4000 символів) із зазначенням інформації, що є частиною набору даних, проте не оприлюднюється через обмежений доступ до неї (із зазначенням виду інформації з обмеженим доступом щодо кожного елементу) 4. Підстава та призначення збору інформації, що міститься в наборі даних 5. Відомості про мову інформації, яка міститься у наборі даних 6. Формат (формати), в якому доступний набір даних 7. Формат стиснення набору даних (за наявності такого стиснення) --- --- --- 8. Дата і час першого оприлюднення набору даних _(генерується автоматично_ _адміністратором Порталу_ _відкритих даних)_ 9. Дата і час внесення останніх змін до набору даних _(генерується автоматично_ _адміністратором Порталу_ _відкритих даних)_ 10. Дата актуальності даних у наборі даних _(вказується дата)_ 11. Періодичність оновлення набору даних 12. Ключові слова, які відображають основний зміст набору даних 13. Гіперпосилання на набір даних (електронний файл для заванта",
+   "fields": [
+    {
+     "field": "date",
+     "type": "date",
+     "branch": "date: The date this section's OWN act bears, as ISO 8601 YYYY-MM-DD, from the line under its letterhead (usually after «від»). The month may be spelled as a word. Null if this section only references another act's date, or shows no date.",
+     "branch_tokens": 66,
+     "top_start": [
+      {
+       "token": 24,
+       "text": "1",
+       "p": 0.018519214989551818
+      },
+      {
+       "token": 27,
+       "text": "0",
+       "p": 0.0007395079057696951
+      },
+      {
+       "token": 25,
+       "text": "3",
+       "p": 0.0006192133708063248
+      }
+     ],
+     "p_start_null": 0.9744849356564047,
+     "p_end_null": 0.9931642622190772,
+     "best_span": {
+      "start_token": 24,
+      "end_token": 33,
+      "text": "13.05.2025",
+      "logp": -10.070158004760742
+     },
+     "logp_null": -0.03270542621612549,
+     "span_wins": false,
+     "value": null,
+     "confidence": 0.967823613066154,
+     "gold": null,
+     "ok": true
+    },
+    {
+     "field": "number",
+     "type": "text",
+     "branch": "number: This section's OWN registration number as printed, without the «№» sign — digits plus any suffix the source attaches («62-2276/2025», «3095-53/VIII»). A blank placeholder (a run of underscores or dots) is null, not a guess. Null if this section only references another act's number.",
+     "branch_tokens": 84,
+     "top_start": [
+      {
+       "token": 38,
+       "text": "6",
+       "p": 0.015378040925400153
+      },
+      {
+       "token": 39,
+       "text": "1",
+       "p": 0.00122323312864335
+      },
+      {
+       "token": 241,
+       "text": "4",
+       "p": 0.0011797186226265284
+      }
+     ],
+     "p_start_null": 0.9657772605652866,
+     "p_end_null": 0.9692946070651269,
+     "best_span": {
+      "start_token": 38,
+      "end_token": 39,
+      "text": "61",
+      "logp": -9.038420677185059
+     },
+     "logp_null": -0.06600873172283173,
+     "span_wins": false,
+     "value": null,
+     "confidence": 0.9361226902920642,
+     "gold": null,
+     "ok": true
+    },
+    {
+     "field": "parent_date",
+     "type": "date",
+     "branch": "parent_date: The date of the act this section is attached to, as ISO 8601 YYYY-MM-DD, read from its «Додаток до …» / «ЗАТВЕРДЖЕНО …» / «СХВАЛЕНО …» line. Null when this section is the act itself.",
+     "branch_tokens": 74,
+     "top_start": [
+      {
+       "token": 24,
+       "text": "1",
+       "p": 0.9922826870713206
+      },
+      {
+       "token": 25,
+       "text": "3",
+       "p": 0.0019751595593256975
+      },
+      {
+       "token": 27,
+       "text": "0",
+       "p": 0.00045127333924387277
+      }
+     ],
+     "p_start_null": 0.00395155311547998,
+     "p_end_null": 0.021283239460391568,
+     "best_span": {
+      "start_token": 24,
+      "end_token": 33,
+      "text": "13.05.2025",
+      "logp": -0.03878069669008255
+     },
+     "logp_null": -9.383481979370117,
+     "span_wins": true,
+     "value": "2025-05-13",
+     "confidence": 0.96196164738908,
+     "gold": "2025-05-13",
+     "ok": true
+    },
+    {
+     "field": "parent_number",
+     "type": "text",
+     "branch": "parent_number: The registration number of the act this section is attached to, as printed without the «№» sign. Null when this section is the act itself, or when the reference line leaves the number blank.",
+     "branch_tokens": 46,
+     "top_start": [
+      {
+       "token": 38,
+       "text": "6",
+       "p": 0.7690733802720389
+      },
+      {
+       "token": 39,
+       "text": "1",
+       "p": 0.05648930467118336
+      },
+      {
+       "token": 24,
+       "text": "1",
+       "p": 0.02202994885273331
+      }
+     ],
+     "p_start_null": 0.08431975939882247,
+     "p_end_null": 0.22856639429804834,
+     "best_span": {
+      "start_token": 38,
+      "end_token": 39,
+      "text": "61",
+      "logp": -0.9577946066856384
+     },
+     "logp_null": -3.9490675926208496,
+     "span_wins": true,
+     "value": "61",
+     "confidence": 0.3837382472203412,
+     "gold": "61",
+     "ok": true
+    },
+    {
+     "field": "annex_no",
+     "type": "text",
+     "branch": "annex_no: This section's own ordinal among the annexes, as printed — «Додаток №1» is 1, «Додаток 2.1» is 2.1. Null when the section is not numbered as an annex.",
+     "branch_tokens": 59,
+     "top_start": [
+      {
+       "token": 5,
+       "text": "2",
+       "p": 0.9101292916102884
+      },
+      {
+       "token": 241,
+       "text": "4",
+       "p": 0.003997703843072486
+      },
+      {
+       "token": 25,
+       "text": "3",
+       "p": 0.0008744546076293501
+      }
+     ],
+     "p_start_null": 0.06337237030784344,
+     "p_end_null": 0.06264076516189436,
+     "best_span": {
+      "start_token": 5,
+      "end_token": 5,
+      "text": "2",
+      "logp": -0.16464869678020477
+     },
+     "logp_null": -5.52906608581543,
+     "span_wins": true,
+     "value": "2",
+     "confidence": 0.84819162420329,
+     "gold": "2",
+     "ok": true
+    },
+    {
+     "field": "session_no",
+     "type": "number",
+     "branch": "session_no: The ordinal of the sitting the act was taken at, as a bare integer — whether printed on this section or on the parent act it names. Words count: «шістдесят другої сесії» is 62.",
+     "branch_tokens": 56,
+     "top_start": [
+      {
+       "token": 38,
+       "text": "6",
+       "p": 0.00730690986206552
+      },
+      {
+       "token": 24,
+       "text": "1",
+       "p": 0.00274603868927228
+      },
+      {
+       "token": 27,
+       "text": "0",
+       "p": 0.0014277346384259275
+      }
+     ],
+     "p_start_null": 0.977204865866447,
+     "p_end_null": 0.9925809124384527,
+     "best_span": {
+      "start_token": 38,
+      "end_token": 39,
+      "text": "61",
+      "logp": -11.415029525756836
+     },
+     "logp_null": -0.030505705624818802,
+     "span_wins": false,
+     "value": null,
+     "confidence": 0.9699548978526842,
+     "gold": null,
+     "ok": true
+    },
+    {
+     "field": "convocation_no",
+     "type": "number",
+     "branch": "convocation_no: The ordinal of the convocation, as a bare integer. Usually a Roman numeral: «VIII скликання» is 8.",
+     "branch_tokens": 36,
+     "top_start": [
+      {
+       "token": 27,
+       "text": "0",
+       "p": 0.011781637178092042
+      },
+      {
+       "token": 38,
+       "text": "6",
+       "p": 0.003883739790344612
+      },
+      {
+       "token": 24,
+       "text": "1",
+       "p": 0.0038481233279551797
+      }
+     ],
+     "p_start_null": 0.9733753336003713,
+     "p_end_null": 0.9986093337614997,
+     "best_span": {
+      "start_token": 27,
+      "end_token": 38,
+      "text": "05.2025 р. № 6",
+      "logp": -12.580062866210938
+     },
+     "logp_null": -0.02837715670466423,
+     "span_wins": false,
+     "value": null,
+     "confidence": 0.9720216931602279,
+     "gold": null,
+     "ok": true
+    },
+    {
+     "field": "place",
+     "type": "text",
+     "branch": "place: The settlement line as printed, keeping its abbreviation exactly («м. Узина», «с. Студена», «селище Журавно»). Do not expand or normalise the abbreviation. Null if the section prints no settlement line — never derive one from the body's name.",
+     "branch_tokens": 68,
+     "top_start": [
+      {
+       "token": 12,
+       "text": " с",
+       "p": 0.03882526176234992
+      },
+      {
+       "token": 38,
+       "text": "6",
+       "p": 0.006777013056134957
+      },
+      {
+       "token": 394,
+       "text": " м",
+       "p": 0.004001317826472926
+      }
+     ],
+     "p_start_null": 0.7925835131859403,
+     "p_end_null": 0.8103243363328434,
+     "best_span": {
+      "start_token": 12,
+      "end_token": 40,
+      "text": " сільського голови від 13.05.2025 р. № 61 П",
+      "logp": -8.820881843566895
+     },
+     "logp_null": -0.4427781105041504,
+     "span_wins": false,
+     "value": null,
+     "confidence": 0.6422496997404842,
+     "gold": null,
+     "ok": true
+    },
+    {
+     "field": "subject",
+     "type": "text",
+     "branch": "subject: This section's own title — the «Про …» clause on an act, or the annex's own heading («Структура та штатна чисельність …»). One line, joined if it wraps. Null if the section has no title.",
+     "branch_tokens": 63,
+     "top_start": [
+      {
+       "token": 40,
+       "text": " П",
+       "p": 0.9955538001847047
+      },
+      {
+       "token": 41,
+       "text": "А",
+       "p": 0.0028712281244313324
+      },
+      {
+       "token": 42,
+       "text": "СП",
+       "p": 0.00042830302635775864
+      }
+     ],
+     "p_start_null": 1.7928496816113977e-05,
+     "p_end_null": 0.0030239082605835552,
+     "best_span": {
+      "start_token": 40,
+      "end_token": 77,
+      "text": " ПАСПОРТ набору даних, який підлягає оприлюдненню у формі відкритих даних",
+      "logp": -0.721172571182251
+     },
+     "logp_null": -16.730323791503906,
+     "span_wins": true,
+     "value": "ПАСПОРТ набору даних, який підлягає оприлюдненню у формі відкритих даних",
+     "confidence": 0.4861818387844649,
+     "gold": "ПАСПОРТ набору даних, який підлягає оприлюдненню у формі відкритих даних",
+     "ok": true
+    }
+   ]
+  },
+  {
+   "id": "04cef6491219",
+   "collection": "myropilska-gromada.gov.ua",
+   "chars": 912,
+   "doc_tokens": 491,
+   "packed_tokens": 1043,
+   "logit_shape": [
+    9,
+    492
+   ],
+   "text": "Додаток 1 до рішення виконавчого комітету Миропільської селищної ради №9 від 19 грудня 2025року ПЕРЕЛІК об’єктів для відпрацювання громадських робіт неповнолітніми засудженими особами на території Миропільської селищної ради 1. Будинок Культури та бібліотеки селища Миропіль, клуб та бібліотека села Дертка, клуб та бібліотека с.Колодяжне, клуб та біблотека с.Пилипо-Кошара, клуб с.Мала Козара, клуб та бібліотека с.Печанівка, клуб с.Паволочка. 2.Миропільський ліцей, Миропільська гімназія, Печанівський ліцей, комунальний заклад «Миропільська школа мистецтв», комунальний заклад «Миропільська дитячо- юнацька спортивна школа». 3. Комунальний заклад «Миропільський історико-краєзнавчий музей» Керуюча справами (секретар) виконавчого комітету селищної ради Ольга БАРДАШ Погоджено: Начальник Житомирського районного сектору № 7 філії ДУ « Центр пробації» у Житомирській області « » грудня 2025 року Олена ЗІЛІНСЬКА",
+   "fields": [
+    {
+     "field": "date",
+     "type": "date",
+     "branch": "date: The date this section's OWN act bears, as ISO 8601 YYYY-MM-DD, from the line under its letterhead (usually after «від»). The month may be spelled as a word. Null if this section only references another act's date, or shows no date.",
+     "branch_tokens": 66,
+     "top_start": [
+      {
+       "token": 42,
+       "text": "1",
+       "p": 0.04450859579010384
+      },
+      {
+       "token": 125,
+       "text": "1",
+       "p": 0.0026637979933986644
+      },
+      {
+       "token": 37,
+       "text": "9",
+       "p": 0.0011627415035226527
+      }
+     ],
+     "p_start_null": 0.94012147108523,
+     "p_end_null": 0.972217547217306,
+     "best_span": {
+      "start_token": 42,
+      "end_token": 51,
+      "text": "19 грудня 2025",
+      "logp": -7.96940279006958
+     },
+     "logp_null": -0.08992187678813934,
+     "span_wins": false,
+     "value": null,
+     "confidence": 0.9140025872998828,
+     "gold": null,
+     "ok": true
+    },
+    {
+     "field": "number",
+     "type": "text",
+     "branch": "number: This section's OWN registration number as printed, without the «№» sign — digits plus any suffix the source attaches («62-2276/2025», «3095-53/VIII»). A blank placeholder (a run of underscores or dots) is null, not a guess. Null if this section only references another act's number.",
+     "branch_tokens": 84,
+     "top_start": [
+      {
+       "token": 37,
+       "text": "9",
+       "p": 0.015053725168866243
+      },
+      {
+       "token": 438,
+       "text": "7",
+       "p": 0.001161814852039922
+      },
+      {
+       "token": 51,
+       "text": "5",
+       "p": 0.0002677815730094079
+      }
+     ],
+     "p_start_null": 0.9796028950254471,
+     "p_end_null": 0.9935449135027364,
+     "best_span": {
+      "start_token": 37,
+      "end_token": 37,
+      "text": "9",
+      "logp": -10.355627059936523
+     },
+     "logp_null": -0.02708400972187519,
+     "span_wins": false,
+     "value": null,
+     "confidence": 0.9732794731518695,
+     "gold": null,
+     "ok": true
+    },
+    {
+     "field": "parent_date",
+     "type": "date",
+     "branch": "parent_date: The date of the act this section is attached to, as ISO 8601 YYYY-MM-DD, read from its «Додаток до …» / «ЗАТВЕРДЖЕНО …» / «СХВАЛЕНО …» line. Null when this section is the act itself.",
+     "branch_tokens": 74,
+     "top_start": [
+      {
+       "token": 42,
+       "text": "1",
+       "p": 0.8672663713216977
+      },
+      {
+       "token": 43,
+       "text": "9",
+       "p": 0.01536077449895062
+      },
+      {
+       "token": 37,
+       "text": "9",
+       "p": 0.01217867102673977
+      }
+     ],
+     "p_start_null": 0.08673621103496242,
+     "p_end_null": 0.2909579675362969,
+     "best_span": {
+      "start_token": 42,
+      "end_token": 51,
+      "text": "19 грудня 2025",
+      "logp": -0.536243200302124
+     },
+     "logp_null": -3.679460287094116,
+     "span_wins": true,
+     "value": "2025-12-19",
+     "confidence": 0.5849416383085507,
+     "gold": "2025-12-19",
+     "ok": true
+    },
+    {
+     "field": "parent_number",
+     "type": "text",
+     "branch": "parent_number: The registration number of the act this section is attached to, as printed without the «№» sign. Null when this section is the act itself, or when the reference line leaves the number blank.",
+     "branch_tokens": 46,
+     "top_start": [
+      {
+       "token": 37,
+       "text": "9",
+       "p": 0.31811370312227255
+      },
+      {
+       "token": 42,
+       "text": "1",
+       "p": 0.07983377118604135
+      },
+      {
+       "token": 51,
+       "text": "5",
+       "p": 0.02138979709651914
+      }
+     ],
+     "p_start_null": 0.467773902294368,
+     "p_end_null": 0.8757922536001713,
+     "best_span": {
+      "start_token": 37,
+      "end_token": 37,
+      "text": "9",
+      "logp": -4.792520999908447
+     },
+     "logp_null": -0.8923965692520142,
+     "span_wins": false,
+     "value": null,
+     "confidence": 0.4096727661703308,
+     "gold": "9",
+     "ok": false
+    },
+    {
+     "field": "annex_no",
+     "type": "text",
+     "branch": "annex_no: This section's own ordinal among the annexes, as printed — «Додаток №1» is 1, «Додаток 2.1» is 2.1. Null when the section is not numbered as an annex.",
+     "branch_tokens": 59,
+     "top_start": [
+      {
+       "token": 5,
+       "text": "1",
+       "p": 0.9283424277963984
+      },
+      {
+       "token": 42,
+       "text": "1",
+       "p": 0.0036308083807010715
+      },
+      {
+       "token": 6,
+       "text": " до",
+       "p": 0.0030140645245726534
+      }
+     ],
+     "p_start_null": 0.05150549194389403,
+     "p_end_null": 0.09521912914917226,
+     "best_span": {
+      "start_token": 5,
+      "end_token": 5,
+      "text": "1",
+      "logp": -0.20936384797096252
+     },
+     "logp_null": -5.317641258239746,
+     "span_wins": true,
+     "value": "1",
+     "confidence": 0.8111000648351802,
+     "gold": "1",
+     "ok": true
+    },
+    {
+     "field": "session_no",
+     "type": "number",
+     "branch": "session_no: The ordinal of the sitting the act was taken at, as a bare integer — whether printed on this section or on the parent act it names. Words count: «шістдесят другої сесії» is 62.",
+     "branch_tokens": 56,
+     "top_start": [
+      {
+       "token": 37,
+       "text": "9",
+       "p": 0.006385245779736127
+      },
+      {
+       "token": 5,
+       "text": "1",
+       "p": 0.002386675900396515
+      },
+      {
+       "token": 42,
+       "text": "1",
+       "p": 0.0017340451304477087
+      }
+     ],
+     "p_start_null": 0.984458119345162,
+     "p_end_null": 0.9975153109706169,
+     "best_span": {
+      "start_token": 37,
+      "end_token": 37,
+      "text": "9",
+      "logp": -12.53645133972168
+     },
+     "logp_null": -0.018151702359318733,
+     "span_wins": false,
+     "value": null,
+     "confidence": 0.982012047513423,
+     "gold": null,
+     "ok": true
+    },
+    {
+     "field": "convocation_no",
+     "type": "number",
+     "branch": "convocation_no: The ordinal of the convocation, as a bare integer. Usually a Roman numeral: «VIII скликання» is 8.",
+     "branch_tokens": 36,
+     "top_start": [
+      {
+       "token": 42,
+       "text": "1",
+       "p": 0.005159840979849005
+      },
+      {
+       "token": 37,
+       "text": "9",
+       "p": 0.0037460501068687425
+      },
+      {
+       "token": 5,
+       "text": "1",
+       "p": 0.0012450737849022439
+      }
+     ],
+     "p_start_null": 0.9848194072602086,
+     "p_end_null": 0.9989810845602307,
+     "best_span": {
+      "start_token": 37,
+      "end_token": 37,
+      "text": "9",
+      "logp": -13.130656242370605
+     },
+     "logp_null": -0.016316432505846024,
+     "span_wins": false,
+     "value": null,
+     "confidence": 0.9838159594462353,
+     "gold": null,
+     "ok": true
+    },
+    {
+     "field": "place",
+     "type": "text",
+     "branch": "place: The settlement line as printed, keeping its abbreviation exactly («м. Узина», «с. Студена», «селище Журавно»). Do not expand or normalise the abbreviation. Null if the section prints no settlement line — never derive one from the body's name.",
+     "branch_tokens": 68,
+     "top_start": [
+      {
+       "token": 143,
+       "text": " с",
+       "p": 0.010112898447542493
+      },
+      {
+       "token": 55,
+       "text": "Е",
+       "p": 0.008262109438531303
+      },
+      {
+       "token": 54,
+       "text": " П",
+       "p": 0.0059775882086610934
+      }
+     ],
+     "p_start_null": 0.8543962022499746,
+     "p_end_null": 0.7429087067589151,
+     "best_span": {
+      "start_token": 143,
+      "end_token": 184,
+      "text": " селища Миропіль, клуб та бібліотека села Дертка, клуб та бібліотека с.Колодяжне",
+      "logp": -8.400087356567383
+     },
+     "logp_null": -0.4545423686504364,
+     "span_wins": false,
+     "value": null,
+     "confidence": 0.6347383776732571,
+     "gold": null,
+     "ok": true
+    },
+    {
+     "field": "subject",
+     "type": "text",
+     "branch": "subject: This section's own title — the «Про …» clause on an act, or the annex's own heading («Структура та штатна чисельність …»). One line, joined if it wraps. Null if the section has no title.",
+     "branch_tokens": 63,
+     "top_start": [
+      {
+       "token": 54,
+       "text": " П",
+       "p": 0.9916112791469969
+      },
+      {
+       "token": 55,
+       "text": "Е",
+       "p": 0.0028400596447065605
+      },
+      {
+       "token": 22,
+       "text": " М",
+       "p": 0.0015561804978499385
+      }
+     ],
+     "p_start_null": 0.00016007682207825694,
+     "p_end_null": 0.0006820034473713312,
+     "best_span": {
+      "start_token": 54,
+      "end_token": 123,
+      "text": " ПЕРЕЛІК об’єктів для відпрацювання громадських робіт неповнолітніми засудженими особами на території Миропільської селищної ради",
+      "logp": -0.7323101162910461
+     },
+     "logp_null": -16.030332565307617,
+     "span_wins": true,
+     "value": "ПЕРЕЛІК об’єктів для відпрацювання громадських робіт неповнолітніми засудженими особами на території Миропільської селищної ради",
+     "confidence": 0.480797009178523,
+     "gold": "ПЕРЕЛІК об'єктів для відпрацювання громадських робіт неповнолітніми засудженими особами на території Миропільської селищної ради",
+     "ok": true
+    }
+   ]
+  }
+ ]
+}

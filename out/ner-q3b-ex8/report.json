@@ -1,0 +1,115 @@
+{
+ "contender": "kev-ner",
+ "base": "Qwen/Qwen3-4B-Base",
+ "bidir_doc": true,
+ "rank": 16,
+ "keep_layers": 0,
+ "examples": 8,
+ "train_limit": 0,
+ "types": [
+  {
+   "name": "PER",
+   "desc": "person; e.g. Bush, Zawahiri, John, Jeff, Sara, Chris, Vince, Musharraf"
+  },
+  {
+   "name": "ORG",
+   "desc": "organization; organizations can represent other groups of people; nationalities are not organizations; e.g. Enron, Al Qaeda, NASA, Taliban, CIA, LTTE, FBI, ISO"
+  },
+  {
+   "name": "LOC",
+   "desc": "location; nationalities are not locations; e.g. US, Iraq, Iran, China, India, United States, Pakistan, Afghanistan"
+  }
+ ],
+ "epochs": 4,
+ "max_width": 16,
+ "threshold": -0.75,
+ "train_sec": 1238.1883318424225,
+ "gpu": "NVIDIA H200",
+ "recall_ceiling": {
+  "ewt_test": 0.9869888475836431,
+  "pud_test": 0.9934640522875817
+ },
+ "gpu_sent_per_sec_b1": 16.434122549779183,
+ "gpu_sent_per_sec_b64": 145.20128795017027,
+ "cpu_ms_per_sent_b1": 1267.499041557312,
+ "results": {
+  "dev": {
+   "micro": {
+    "p": 0.8523344191096635,
+    "r": 0.8333333333333334,
+    "f1": 0.8427267847557703,
+    "gold": 942
+   },
+   "PER": {
+    "p": 0.9134328358208955,
+    "r": 0.9,
+    "f1": 0.9066666666666666,
+    "gold": 340
+   },
+   "ORG": {
+    "p": 0.7427184466019418,
+    "r": 0.7050691244239631,
+    "f1": 0.723404255319149,
+    "gold": 217
+   },
+   "LOC": {
+    "p": 0.8578947368421053,
+    "r": 0.8467532467532467,
+    "f1": 0.8522875816993464,
+    "gold": 385
+   }
+  },
+  "ewt_test": {
+   "micro": {
+    "p": 0.8665377176015474,
+    "r": 0.846081208687441,
+    "f1": 0.8561872909698997,
+    "gold": 1059
+   },
+   "PER": {
+    "p": 0.9543269230769231,
+    "r": 0.9002267573696145,
+    "f1": 0.926487747957993,
+    "gold": 441
+   },
+   "ORG": {
+    "p": 0.7951388888888888,
+    "r": 0.7292993630573248,
+    "f1": 0.760797342192691,
+    "gold": 314
+   },
+   "LOC": {
+    "p": 0.8181818181818182,
+    "r": 0.8881578947368421,
+    "f1": 0.8517350157728707,
+    "gold": 304
+   }
+  },
+  "pud_test": {
+   "micro": {
+    "p": 0.8490196078431372,
+    "r": 0.8185255198487713,
+    "f1": 0.8334937439846005,
+    "gold": 1058
+   },
+   "PER": {
+    "p": 0.9356435643564357,
+    "r": 0.9264705882352942,
+    "f1": 0.9310344827586207,
+    "gold": 408
+   },
+   "ORG": {
+    "p": 0.8840579710144928,
+    "r": 0.5281385281385281,
+    "f1": 0.6612466124661247,
+    "gold": 231
+   },
+   "LOC": {
+    "p": 0.7656903765690377,
+    "r": 0.8735083532219571,
+    "f1": 0.8160535117056857,
+    "gold": 419
+   }
+  }
+ }
+}

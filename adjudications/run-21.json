@@ -1,0 +1,33 @@
+{
+ "note": "Manual review (2026-09-24) of every eval field where kev-1.5b or the generative baseline disagreed with Studio gold. Only entries where the printed text contradicts the gold under the field's own description are listed. `adjudicated: null` means the value is not printed / not a valid value of the declared type; `exclude` drops the field from adjudicated scoring because no printed span can match the gold's convention. Local to this bake-off: nothing here was written back to Studio.",
+ "exclude_units": [
+  {"id_prefix": "01acedd42e4a", "suffix": ":0",
+   "reason": "Partial correction row (name-keyed cells, no field labelled); its full twin #s0 covers the same text."}
+ ],
+ "fields": [
+  {"id_prefix": "090c959280f1", "suffix": "#s2", "field": "place", "gold": "с. Журавненська", "adjudicated": null,
+   "reason": "No settlement line printed; «Журавненська» is an adjective lifted from the council name."},
+  {"id_prefix": "1af84d9d8a92", "suffix": "#s0", "field": "place", "gold": "с. Миропіль", "adjudicated": null,
+   "reason": "Vote-results sheet prints no settlement line; value inferred from «Миропільська селищна рада»."},
+  {"id_prefix": "4feef176abb4", "suffix": "#s0", "field": "place", "gold": "с. Журавно", "adjudicated": "Селище Журавно",
+   "reason": "Printed «Селище Журавно»; the field says keep the abbreviation exactly as printed."},
+  {"id_prefix": "0c3bec45fdf0", "suffix": "#s0", "field": "number", "gold": "65", "adjudicated": null,
+   "reason": "«№ 65 сесія 8 скликання» — 65 is the session ordinal; the act's own number is blank (draft)."},
+  {"id_prefix": "090c959280f1", "suffix": "#s0", "field": "number", "gold": "51-1355600000", "adjudicated": "51-",
+   "reason": "1355600000 is the separately captioned «Код бюджету»; the same template's sibling unit is gold «51-»."},
+  {"id_prefix": "0c3bec45fdf0", "suffix": "#s0", "field": "date", "gold": "2025-12", "adjudicated": null,
+   "reason": "Not a YYYY-MM-DD date: the draft prints «від грудня 2025» with the day blank."},
+  {"id_prefix": "0c3bec45fdf0", "suffix": "#s1", "field": "parent_date", "gold": "2025-12-грудня", "adjudicated": null,
+   "reason": "Malformed date; parent printed «від грудня 2025 року» with the day blank."},
+  {"id_prefix": "0c3bec45fdf0", "suffix": "#s2", "field": "parent_date", "gold": "2025-12-грудня", "adjudicated": null,
+   "reason": "Malformed date; parent printed «від грудня 2025 року» with the day blank."},
+  {"id_prefix": "206b97614e95", "suffix": "#s0", "field": "parent_date", "gold": "2025-04-??", "adjudicated": null,
+   "reason": "Malformed date; parent printed «від .04.2025» with the day blank."},
+  {"id_prefix": "0c3bec45fdf0", "suffix": "#s3", "field": "subject", "gold": "Пояснювальна записка до проєкту рішення про затвердження Плану …", "exclude": true,
+   "reason": "Gold is a synthesised heading: the printed one reads «ПОЯСНЮВАЛЬНА ЗАПИСКА ДО ПРОЄКТУ РІШЕННЯ 65 позачергової СЕСІЇ … «Про затвердження Плану …»»."},
+  {"id_prefix": "05b3aeb97c61", "suffix": "#s2", "field": "subject", "gold": "про громадську комісію з житлових питань …", "exclude": true,
+   "reason": "Gold drops the letter-spaced «П О Л О Ж Е Н Н Я» and rejoins «п ро»; not reproducible as a printed span."},
+  {"id_prefix": "4502b2744f2d", "suffix": "#s0", "field": "convocation_no", "gold": 8, "exclude": true,
+   "reason": "Ambiguous: the only «VIII» is the suffix of the PARENT's registration number («№ 59-27/VIII»); session_no's description allows reading the parent act, convocation_no's does not. Added in the second review, after run 2 was scored."}
+ ]
+}

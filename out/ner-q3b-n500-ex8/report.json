@@ -1,0 +1,115 @@
+{
+ "contender": "kev-ner",
+ "base": "Qwen/Qwen3-4B-Base",
+ "bidir_doc": true,
+ "rank": 16,
+ "keep_layers": 0,
+ "examples": 8,
+ "train_limit": 500,
+ "types": [
+  {
+   "name": "PER",
+   "desc": "person; e.g. Bush, John, Zawahiri, Jafar the Pilot, Sara, Jeff, Sara Shackleton, Titman"
+  },
+  {
+   "name": "ORG",
+   "desc": "organization; organizations can represent other groups of people; nationalities are not organizations; e.g. EnronOnline, NASA, Taliban, Questar, NPR, BC Gas, SUN, Anti-Fraud Centre"
+  },
+  {
+   "name": "LOC",
+   "desc": "location; nationalities are not locations; e.g. US, Argentina, Agra, Iraq, China, Chicago, Canada, Delhi"
+  }
+ ],
+ "epochs": 4,
+ "max_width": 16,
+ "threshold": -2.25,
+ "train_sec": 53.99876070022583,
+ "gpu": "NVIDIA H200",
+ "recall_ceiling": {
+  "ewt_test": 0.9869888475836431,
+  "pud_test": 0.9934640522875817
+ },
+ "gpu_sent_per_sec_b1": 10.275832323022692,
+ "gpu_sent_per_sec_b64": 135.9241825134848,
+ "cpu_ms_per_sent_b1": 2709.5523715019226,
+ "results": {
+  "dev": {
+   "micro": {
+    "p": 0.12084993359893759,
+    "r": 0.09660297239915075,
+    "f1": 0.10737463126843659,
+    "gold": 942
+   },
+   "PER": {
+    "p": 0.12084993359893759,
+    "r": 0.2676470588235294,
+    "f1": 0.16651418115279049,
+    "gold": 340
+   },
+   "ORG": {
+    "p": 0.0,
+    "r": 0.0,
+    "f1": 0.0,
+    "gold": 217
+   },
+   "LOC": {
+    "p": 0.0,
+    "r": 0.0,
+    "f1": 0.0,
+    "gold": 385
+   }
+  },
+  "ewt_test": {
+   "micro": {
+    "p": 0.18836915297092288,
+    "r": 0.14069877242681775,
+    "f1": 0.16108108108108107,
+    "gold": 1059
+   },
+   "PER": {
+    "p": 0.1888466413181242,
+    "r": 0.3378684807256236,
+    "f1": 0.24227642276422762,
+    "gold": 441
+   },
+   "ORG": {
+    "p": 0.0,
+    "r": 0.0,
+    "f1": 0.0,
+    "gold": 314
+   },
+   "LOC": {
+    "p": 0.0,
+    "r": 0.0,
+    "f1": 0.0,
+    "gold": 304
+   }
+  },
+  "pud_test": {
+   "micro": {
+    "p": 0.17925591882750846,
+    "r": 0.1502835538752363,
+    "f1": 0.16349614395886888,
+    "gold": 1058
+   },
+   "PER": {
+    "p": 0.17925591882750846,
+    "r": 0.3897058823529412,
+    "f1": 0.2455598455598456,
+    "gold": 408
+   },
+   "ORG": {
+    "p": 0.0,
+    "r": 0.0,
+    "f1": 0.0,
+    "gold": 231
+   },
+   "LOC": {
+    "p": 0.0,
+    "r": 0.0,
+    "f1": 0.0,
+    "gold": 419
+   }
+  }
+ }
+}

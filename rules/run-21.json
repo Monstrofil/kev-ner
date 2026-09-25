@@ -1,0 +1,14 @@
+{
+ "date": {
+  "parts": {"day": "1-31", "month": "1-12", "year": "2000-2030"},
+  "gold": "(?P<year>\\d{4})(?:-(?P<month>\\d{2})(?:-(?P<day>\\d{2}))?)?",
+  "output": "{year:04d}-{month:02d}-{day:02d}"
+ },
+ "parent_date": {
+  "parts": {"day": "1-31", "month": "1-12", "year": "2000-2030"},
+  "gold": "(?P<year>\\d{4})(?:-(?P<month>\\d{2})(?:-(?P<day>\\d{2}))?)?",
+  "output": "{year:04d}-{month:02d}-{day:02d}"
+ },
+ "session_no": {"parts": {"value": "1-150"}, "gold": "(?P<value>\\d+)", "output": "{value}"},
+ "convocation_no": {"parts": {"value": "1-12"}, "gold": "(?P<value>\\d+)", "output": "{value}"}
+}

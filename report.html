@@ -1,0 +1,370 @@
+<title>One-Pass Span Extraction</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap">
+<style>
+:root {
+  --bg: #f4f6f8;
+  --surface: #ffffff;
+  --ink: #18202c;
+  --muted: #5a6474;
+  --rule: #d9dee5;
+  --accent: #16708a;
+  --accent-soft: #d9ecf1;
+  --base: #8a93a3;
+  --hl: #f6d98a;
+  --hl-ink: #4a3a08;
+  --null: #e9ecf0;
+  --good: #2c7a4b;
+  --bad: #b03a3a;
+  --code-bg: #eef1f4;
+  --sans: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #11151b; --surface: #181e26; --ink: #e5e9ef; --muted: #9aa4b3; --rule: #2a323d;
+    --accent: #5db4cc; --accent-soft: #1b3a44; --base: #6f7888; --hl: #6b5514; --hl-ink: #fbe7ae;
+    --null: #232a34; --good: #5fbf85; --bad: #e07a7a; --code-bg: #1d242d;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #11151b; --surface: #181e26; --ink: #e5e9ef; --muted: #9aa4b3; --rule: #2a323d;
+  --accent: #5db4cc; --accent-soft: #1b3a44; --base: #6f7888; --hl: #6b5514; --hl-ink: #fbe7ae;
+  --null: #232a34; --good: #5fbf85; --bad: #e07a7a; --code-bg: #1d242d;
+}
+
+body { background: var(--bg); color: var(--ink); font: 16px/1.6 var(--sans); }
+.page { max-width: 780px; margin: 0 auto; padding-inline: 20px; padding-block: 48px 72px; display: grid; gap: 56px; }
+h1, h2, h3 { text-wrap: balance; line-height: 1.2; margin: 0; }
+h1 { font-size: 2.1rem; font-weight: 700; letter-spacing: -0.01em; }
+h2 { font-size: 1.35rem; font-weight: 600; }
+h3 { font-size: 1rem; font-weight: 600; }
+p { margin: 0; max-width: 66ch; }
+section { display: grid; gap: 16px; }
+.eyebrow { font: 500 0.75rem/1 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); }
+.lede { font-size: 1.1rem; color: var(--muted); }
+.muted { color: var(--muted); }
+.small { font-size: 0.875rem; }
+code, .mono { font-family: var(--mono); font-size: 0.88em; }
+code { background: var(--code-bg); padding: 1px 5px; border-radius: 4px; }
+ul { margin: 0; padding-left: 1.2em; display: grid; gap: 6px; max-width: 66ch; }
+.num { font-variant-numeric: tabular-nums; }
+
+header.top { display: grid; gap: 14px; }
+.meta { display: flex; flex-wrap: wrap; gap: 6px 18px; font: 0.8rem/1.4 var(--mono); color: var(--muted); }
+
+.stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.stat { background: var(--surface); border: 1px solid var(--rule); border-radius: 8px; padding: 16px; display: grid; gap: 6px; align-content: start; }
+.stat .v { font: 600 1.7rem/1 var(--mono); font-variant-numeric: tabular-nums; }
+.stat .v small { font-size: 0.9rem; color: var(--muted); font-weight: 400; }
+.stat .l { font-size: 0.85rem; color: var(--muted); }
+@media (max-width: 620px) { .stats { grid-template-columns: 1fr; } }
+
+.doc { background: var(--surface); border: 1px solid var(--rule); border-radius: 8px; padding: 18px 20px; font: 0.95rem/1.9 var(--sans); }
+mark { background: var(--hl); color: var(--hl-ink); border-radius: 3px; padding: 1px 3px; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+mark sub { font: 500 0.62rem/1 var(--mono); vertical-align: baseline; margin-left: 4px; opacity: 0.85; letter-spacing: 0.02em; }
+
+.twocol { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; }
+@media (max-width: 680px) { .twocol { grid-template-columns: 1fr; } }
+pre { margin: 0; background: var(--code-bg); border-radius: 8px; padding: 14px 16px; overflow-x: auto; font: 0.78rem/1.55 var(--mono); }
+.panel-label { font: 500 0.72rem/1 var(--mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+
+.strip { display: flex; flex-wrap: wrap; gap: 4px; font: 0.75rem/1 var(--mono); }
+.strip span { padding: 8px 10px; border-radius: 4px; background: var(--null); color: var(--ink); }
+.strip .d { background: var(--accent-soft); flex: 3 1 180px; }
+.strip .dec { outline: 1.5px solid var(--accent); }
+
+.figure { background: var(--surface); border: 1px solid var(--rule); border-radius: 8px; padding: 18px; display: grid; gap: 12px; }
+.figure svg { width: 100%; height: auto; display: block; }
+.legend { display: flex; flex-wrap: wrap; gap: 16px; font-size: 0.82rem; color: var(--muted); }
+.legend i { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; vertical-align: -1px; }
+
+.tablewrap { overflow-x: auto; background: var(--surface); border: 1px solid var(--rule); border-radius: 8px; }
+table { border-collapse: collapse; width: 100%; font-size: 0.86rem; min-width: 560px; }
+th, td { text-align: right; padding: 10px 10px; border-bottom: 1px solid var(--rule); font-variant-numeric: tabular-nums; white-space: nowrap; }
+th:first-child, td:first-child { text-align: left; white-space: normal; min-width: 180px; }
+thead th { font: 500 0.72rem/1.3 var(--mono); letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted); }
+tbody tr:last-child td { border-bottom: 0; }
+tr.win td { font-weight: 600; }
+tr.win td:first-child { color: var(--accent); }
+td.ceil { color: var(--muted); font-style: italic; }
+
+.split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; }
+@media (max-width: 680px) { .split { grid-template-columns: 1fr; } }
+.card { background: var(--surface); border: 1px solid var(--rule); border-radius: 8px; padding: 16px 18px; display: grid; gap: 10px; align-content: start; }
+.card ul { font-size: 0.92rem; }
+.tag { display: inline-block; font: 500 0.7rem/1 var(--mono); padding: 4px 7px; border-radius: 4px; letter-spacing: 0.04em; text-transform: uppercase; }
+.tag.good { background: color-mix(in srgb, var(--good) 16%, transparent); color: var(--good); }
+.tag.bad { background: color-mix(in srgb, var(--bad) 14%, transparent); color: var(--bad); }
+.tag.est { background: var(--null); color: var(--muted); }
+
+.steps { display: grid; gap: 10px; counter-reset: s; padding: 0; list-style: none; max-width: 66ch; }
+.steps li { display: grid; grid-template-columns: 28px 1fr; gap: 10px; align-items: start; }
+.steps li::before { counter-increment: s; content: counter(s); font: 600 0.8rem/26px var(--mono); text-align: center; width: 26px; height: 26px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); }
+
+footer { border-top: 1px solid var(--rule); padding-top: 18px; font-size: 0.82rem; color: var(--muted); display: grid; gap: 6px; }
+</style>
+
+<div class="page">
+
+<header class="top">
+  <div class="eyebrow">Extraction experiment · 24 Sep 2026</div>
+  <h1>One-pass span extraction beats the distilled LLM on held-out sources</h1>
+  <p class="lede">We adapted the “System One” decision-model idea (every schema field answered in a single forward pass, nothing generated) to named-field extraction. On documents from sources it never trained on, it is more accurate than our released generative student and several times cheaper to run.</p>
+  <div class="meta">
+    <span>task: header metadata · 9 fields</span>
+    <span>eval: 59 units · 4 held-out sources</span>
+    <span>train: 173 units · 11 sources</span>
+  </div>
+</header>
+
+<section aria-label="Headline results">
+  <div class="stats">
+    <div class="stat">
+      <div class="v num">0.891 <small>vs 0.846</small></div>
+      <div class="l">Mean field accuracy against the released generative model (0.903 vs 0.858 after gold review)</div>
+    </div>
+    <div class="stat">
+      <div class="v num">52 ms <small>/ unit</small></div>
+      <div class="l">One forward pass on an H100, unbatched and unoptimised. No token-by-token decoding.</div>
+    </div>
+    <div class="stat">
+      <div class="v num">0 <small>malformed</small></div>
+      <div class="l">Every answer is a substring of the input or null. The LLM returned unparseable output on 7% of units.</div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="eyebrow">What it does</div>
+  <h2>Point at the text instead of writing it</h2>
+  <p>A generative model reads the document and then writes a JSON answer one token at a time. The span model reads the document once and, for every field in the schema, points at where the answer starts and ends. If a field is not printed, it points at a “null” slot. The highlighted text below is one real held-out document header; the model got all nine fields right on it.</p>
+  <div class="doc" lang="uk">
+    ЖУРАВНЕНСЬКА СЕЛИЩНА РАДА СТРИЙСЬКОГО РАЙОНУ ЛЬВІВСЬКОЇ ОБЛАСТІ
+    <mark>51<sub>session_no</sub></mark> СЕСІЯ <mark>VIII<sub>convocation_no</sub></mark> СКЛИКАННЯ
+    Р І Ш Е Н Н Я від <mark>18 грудня 2025<sub>date</sub></mark> року
+    <mark>селище Журавно<sub>place</sub></mark> № <mark>51<sub>number</sub></mark> -
+    <mark>Про затвердження технічної документації із землеустрою щодо встановлення меж земельної ділянки площею 0,1666 га в натурі (на місцевості) на території Журавненської селищної ради ( Володимирецький старостинський округ) для ведення товарного сільськогосподарського виробництва (Добрич Н.Є.)<sub>subject</sub></mark>
+  </div>
+  <p class="small muted">Highlights show where each gold value is printed. parent_date, parent_number and annex_no are correctly null on this unit.</p>
+
+  <div class="twocol">
+    <div>
+      <div class="panel-label">What the network emits</div>
+<pre>for each field (9):
+  start_logits  [n_doc_tokens + 1]
+  end_logits    [n_doc_tokens + 1]
+                             ^ null slot
+
+one forward pass, all fields at once</pre>
+    </div>
+    <div>
+      <div class="panel-label">What the caller receives</div>
+<pre>{
+  "date":   {"value": "2025-12-18",
+             "span": "18 грудня 2025"},
+  "convocation_no": {"value": 8,
+             "span": "VIII"},
+  "parent_number": {"value": null},
+  …
+}</pre>
+    </div>
+  </div>
+  <p class="small muted">A small decoder picks the most likely span per field (or null), cuts it out of the document, and applies a normaliser chosen by the field’s declared type: dates to ISO, numbers from digits or roman numerals, text kept as printed. Each value also carries a calibrated confidence.</p>
+</section>
+
+<section>
+  <div class="eyebrow">Architecture</div>
+  <h2>One packed sequence, one branch per field</h2>
+  <p>The backbone is Qwen2.5-1.5B with a rank-16 LoRA adapter, following the open kev reproduction of TypeSafe’s Jev. Each schema field becomes a short branch appended after the document: the field name, the description the user wrote in the schema, and a decision marker. The field descriptions come straight from the schema, so nothing about the domain is built into the model.</p>
+  <div class="strip" aria-label="Packed input sequence">
+    <span class="d">document tokens (first 1,536)</span>
+    <span>date: …</span><span class="dec">▸</span>
+    <span>number: …</span><span class="dec">▸</span>
+    <span>place: …</span><span class="dec">▸</span>
+    <span>… 6 more</span>
+  </div>
+  <div class="figure">
+    <svg id="mask" viewBox="0 0 600 262" style="max-width:600px" role="img" aria-label="Attention mask: document attends causally to itself; each branch attends to the document and its own tokens only"></svg>
+    <p class="small muted">Attention mask. Each branch sees the whole document and itself, never another branch, and all branches restart their positions right after the document. So the fields are answered in parallel, and adding a field only adds its own branch tokens. A start-up check confirms that editing one branch moves another field’s output by exactly 0.</p>
+  </div>
+  <ol class="steps">
+    <li><span>Each branch’s decision marker is projected into a <b>start</b> query and an <b>end</b> query.</span></li>
+    <li><span>Both are scored against every document token (a pointer head), plus a learned null score.</span></li>
+    <li><span>Softmax, a temperature fitted on development sources, then the best start–end pair against null.</span></li>
+  </ol>
+</section>
+
+<section>
+  <div class="eyebrow">Results</div>
+  <h2>Accuracy on sources never seen in training</h2>
+  <p>Evaluation uses the same split the released model was trained and scored on: four whole sources held out. Scoring is the distiller’s own type-aware field comparison, so both models are judged identically.</p>
+  <div class="tablewrap">
+    <table>
+      <thead>
+        <tr><th>Model</th><th>Mean field</th><th>After gold review</th><th>All fields right</th><th>GPU / unit</th><th>CPU / unit</th></tr>
+      </thead>
+      <tbody>
+        <tr class="win"><td>Span model · Qwen2.5-1.5B</td><td>0.891</td><td>0.903</td><td>0.390</td><td>52 ms</td><td>6.5 s</td></tr>
+        <tr><td>Span model · Qwen2.5-0.5B</td><td>0.855</td><td>0.867</td><td>0.186</td><td>35 ms</td><td>2.2 s</td></tr>
+        <tr><td>Released generative student (Qwen2.5-1.5B QLoRA)</td><td>0.846</td><td>0.858</td><td>0.407</td><td>—</td><td>—</td></tr>
+        <tr><td>GLiNER multilingual, fine-tuned</td><td>0.567</td><td>0.580</td><td>—</td><td>90 ms</td><td>1.6 s</td></tr>
+        <tr><td>Ceiling for any extractor</td><td class="ceil">0.962</td><td class="ceil">—</td><td class="ceil">0.678</td><td></td><td></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="small muted">GPU times measured one unit at a time on an H100, CPU times on 8 cores. The ceiling counts gold values that are not printed anywhere in the text, which no extractor can reproduce. GLiNER most likely suffers from our training setup and was not tuned further.</p>
+
+  <div class="figure">
+    <h3>Per-field accuracy</h3>
+    <div class="legend"><span><i style="background:var(--accent)"></i>Span model 1.5B</span><span><i style="background:var(--base)"></i>Generative student</span></div>
+    <svg id="fields" viewBox="0 0 680 330" role="img" aria-label="Per-field accuracy dot plot, span model vs generative student"></svg>
+    <p class="small muted">Axis starts at 0.6. The span model is ahead or level on 7 of 9 fields; the largest gain is parent_date, where the generative model invents dates on pages that print none. It trails on parent_number and subject.</p>
+  </div>
+</section>
+
+<section>
+  <div class="eyebrow">Gold review</div>
+  <h2>Every mismatch was read against the document</h2>
+  <p>We reviewed each held-out field where either model disagreed with the labels. Thirteen labels were wrong or ambiguous: values not printed anywhere (an inferred settlement), a session ordinal stored as the act number, a budget code glued onto a number, four malformed dates such as <code>2025-12-грудня</code> and <code>2025-04-??</code>, two synthesised titles and one stale correction row. The corrections are kept in the experiment and have not been written back.</p>
+  <div class="split">
+    <div class="card">
+      <span class="tag bad">Span model errors</span>
+      <ul>
+        <li>Cuts <span class="mono">105/105</span>-style numbers to <span class="mono">105</span> in one unseen template</li>
+        <li>Returns null for a printed settlement or parent number in unfamiliar layouts</li>
+        <li>Title boundaries: stops early or runs into body text</li>
+        <li>Returns the inner title where labels expect the full heading of an explanatory note</li>
+      </ul>
+    </div>
+    <div class="card">
+      <span class="tag bad">Generative model errors</span>
+      <ul>
+        <li>Unparseable output on 7% of units, losing all nine fields at once</li>
+        <li>Invented dates such as <span class="mono">2026-01-01</span> on pages without one</li>
+        <li>Titles translated into English</li>
+        <li>Wrong month; registration suffixes dropped</li>
+      </ul>
+    </div>
+  </div>
+  <p class="small muted">The generative failures are ones the span model cannot make by construction. We also found a scoring bug: the text matcher uses Python’s <code>SequenceMatcher</code> with <code>autojunk</code> on, which scored one correct 260-character title at 0.015 instead of 0.98.</p>
+</section>
+
+<section>
+  <div class="eyebrow">Cost and speed</div>
+  <h2>No decoding means fewer, cheaper GPU seconds</h2>
+  <p>Both models read a similar number of tokens for a typical document, so reading costs about the same. The difference is everything after: the generative model writes around 180 tokens per window, sequentially, and repeats the whole read for every 4,096-token window of a long document. The span model does neither.</p>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>Per unit, H100, batched</th><th>GPU time</th><th>Single-request latency</th><th>Per 1M units</th></tr></thead>
+      <tbody>
+        <tr><td>Generative student (vLLM)</td><td>60–100 ms</td><td>0.7–1.5 s</td><td>$70–110</td></tr>
+        <tr class="win"><td>Span model · 1.5B</td><td>15–25 ms</td><td>~50 ms</td><td>$17–28</td></tr>
+        <tr><td>Span model · 0.5B</td><td>6–10 ms</td><td>~35 ms</td><td>$7–11</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="small muted"><span class="tag est">Estimate</span> Throughput and cost are back-of-envelope figures from token counts and H100 rates (about $4 per hour), not a benchmark; the generative model was not re-measured. Latencies for the span model are measured. The advantage grows with more fields and longer documents, and the 0.5B model is usable on CPU.</p>
+</section>
+
+<section>
+  <div class="eyebrow">Limits</div>
+  <h2>What it cannot do yet</h2>
+  <ul>
+    <li>It reads the first 1,536 tokens of a document. That covers 99% of labelled values here; longer documents need windowing.</li>
+    <li>It can only copy text that is printed. Values the labels reformat or synthesise need a normaliser rule or are out of reach.</li>
+    <li>No list fields yet, such as a roster of voters. Those still need the generative model or a multi-span extension.</li>
+    <li>One task and 59 held-out units so far. The margin over the baseline should be confirmed on other tasks.</li>
+  </ul>
+</section>
+
+<section>
+  <div class="eyebrow">Next</div>
+  <h2>Proposed next steps</h2>
+  <ul>
+    <li>Repeat on a second extraction task and add multi-span output for list fields.</li>
+    <li>Build it as the distiller’s <code>token_classifier</code> backend, which is already declared but not implemented.</li>
+    <li>Benchmark both models on the same GPU with batching, using the released adapter.</li>
+    <li>Fix the <code>autojunk</code> scoring bug and push the reviewed labels back into Studio.</li>
+  </ul>
+</section>
+
+<footer>
+  <div>Training: 12 epochs, LoRA rank 16, 4.5 minutes on one H100. Temperature and the span-versus-null bias are fitted on two training sources held out for that purpose; the four evaluation sources tune nothing.</div>
+  <div>Code and reports: <span class="mono">experiments/span-bakeoff/</span></div>
+</footer>
+
+</div>
+
+<script>
+(function () {
+  var NS = "http://www.w3.org/2000/svg";
+  function el(name, attrs, text) {
+    var n = document.createElementNS(NS, name);
+    for (var k in attrs) n.setAttribute(k, attrs[k]);
+    if (text != null) n.textContent = text;
+    return n;
+  }
+
+  // Attention mask: D = document, B1..B3 = branches. Rows attend to columns.
+  var mask = document.getElementById("mask");
+  var blocks = [["document", 4], ["date", 2], ["number", 2], ["place", 2]];
+  var cell = 22, ox = 90, oy = 30, n = 0;
+  blocks.forEach(function (b) { n += b[1]; });
+  var starts = [], s = 0;
+  blocks.forEach(function (b) { starts.push(s); s += b[1]; });
+  function blockOf(i) { for (var k = blocks.length - 1; k >= 0; k--) if (i >= starts[k]) return k; }
+  for (var r = 0; r < n; r++) {
+    for (var c = 0; c < n; c++) {
+      var br = blockOf(r), bc = blockOf(c), allowed;
+      if (br === 0) allowed = bc === 0 && c <= r;
+      else allowed = bc === 0 || (bc === br && c <= r);
+      mask.appendChild(el("rect", {
+        x: ox + c * cell + 1, y: oy + r * cell + 1, width: cell - 2, height: cell - 2, rx: 2,
+        fill: allowed ? (bc === 0 ? "var(--accent)" : "var(--base)") : "var(--null)"
+      }));
+    }
+  }
+  blocks.forEach(function (b, k) {
+    var y = oy + (starts[k] + b[1] / 2) * cell + 4;
+    mask.appendChild(el("text", { x: ox - 8, y: y, "text-anchor": "end", "font-size": 11, "font-family": "IBM Plex Mono, monospace", fill: "var(--muted)" }, b[0]));
+    var x = ox + (starts[k] + b[1] / 2) * cell;
+    mask.appendChild(el("text", { x: x, y: oy - 8, "text-anchor": "middle", "font-size": 10, "font-family": "IBM Plex Mono, monospace", fill: "var(--muted)" }, b[0] === "document" ? "doc" : b[0]));
+  });
+  var lx = ox + n * cell + 28;
+  [["var(--accent)", "attends to document"], ["var(--base)", "attends to own branch"], ["var(--null)", "blocked"]].forEach(function (L, i) {
+    mask.appendChild(el("rect", { x: lx, y: oy + 20 + i * 26, width: 14, height: 14, rx: 2, fill: L[0] }));
+    mask.appendChild(el("text", { x: lx + 22, y: oy + 31 + i * 26, "font-size": 12, "font-family": "IBM Plex Sans, sans-serif", fill: "var(--ink)" }, L[1]));
+  });
+  mask.appendChild(el("text", { x: lx, y: oy + 118, "font-size": 11, "font-family": "IBM Plex Sans, sans-serif", fill: "var(--muted)" }, "rows attend to columns"));
+
+  // Per-field dot plot.
+  var data = [
+    ["parent_date", 0.898, 0.678], ["session_no", 0.966, 0.898], ["convocation_no", 0.983, 0.898],
+    ["number", 0.898, 0.831], ["annex_no", 0.966, 0.915], ["date", 0.949, 0.898],
+    ["place", 0.847, 0.847], ["subject", 0.712, 0.746], ["parent_number", 0.797, 0.898]
+  ];
+  var svg = document.getElementById("fields");
+  var L = 130, R = 590, T = 16, row = 32, lo = 0.6, hi = 1.0;
+  function X(v) { return L + (v - lo) / (hi - lo) * (R - L); }
+  var bottom = T + data.length * row;
+  [0.6, 0.7, 0.8, 0.9, 1.0].forEach(function (t) {
+    svg.appendChild(el("line", { x1: X(t), x2: X(t), y1: T - 4, y2: bottom - 8, stroke: "var(--rule)", "stroke-width": 1 }));
+    svg.appendChild(el("text", { x: X(t), y: bottom + 8, "text-anchor": "middle", "font-size": 11, "font-family": "IBM Plex Mono, monospace", fill: "var(--muted)" }, t.toFixed(1)));
+  });
+  data.forEach(function (d, i) {
+    var y = T + i * row + 10;
+    svg.appendChild(el("text", { x: L - 12, y: y + 4, "text-anchor": "end", "font-size": 12, "font-family": "IBM Plex Mono, monospace", fill: "var(--ink)" }, d[0]));
+    svg.appendChild(el("line", { x1: X(Math.min(d[1], d[2])), x2: X(Math.max(d[1], d[2])), y1: y, y2: y, stroke: "var(--rule)", "stroke-width": 3 }));
+    svg.appendChild(el("circle", { cx: X(d[2]), cy: y, r: 5.5, fill: "var(--base)" }));
+    svg.appendChild(el("circle", { cx: X(d[1]), cy: y, r: 5.5, fill: "var(--accent)" }));
+    var delta = d[1] - d[2];
+    var label = (delta >= 0 ? "+" : "−") + Math.abs(delta).toFixed(3);
+    svg.appendChild(el("text", { x: 672, y: y + 4, "text-anchor": "end", "font-size": 11, "font-family": "IBM Plex Mono, monospace",
+      fill: delta > 0 ? "var(--good)" : delta < 0 ? "var(--bad)" : "var(--muted)" }, delta === 0 ? "±0" : label));
+  });
+})();
+</script>
