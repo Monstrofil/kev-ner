@@ -3,7 +3,7 @@
 The model, its threshold and its settings come from the run's own ``report.json``; nothing is retrained.
 Throughput is original sentences per second, so it compares directly with the per-sentence numbers.
 
-    python long_eval.py fixtures/uner-long.json out/ner-q3b-keep24 --out out/long-keep24
+    python -m scripts.long_eval fixtures/uner-long.json results/ner-q3b-keep24 --out results/long-keep24
 """
 
 from __future__ import annotations
@@ -17,8 +17,8 @@ import torch
 from peft import PeftModel
 from transformers import AutoModel, AutoTokenizer
 
-from kev_ner import KevNer, Packed, SpanHead, collate, decode, to
-from uner import line, score
+from kev.ner import KevNer, Packed, SpanHead, collate, decode, to
+from kev.uner import line, score
 
 
 def main() -> None:

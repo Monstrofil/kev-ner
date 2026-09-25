@@ -6,7 +6,7 @@ Every unit carries its own ``types`` (the branches it is asked). Pile-NER answer
 becomes every whole-word occurrence in its passage; each passage also asks a few types it does not
 contain, drawn from the other passages, so "nothing of this type" is trained too.
 
-    python zs_data.py data/zs fixtures/zs.json
+    python -m scripts.zs_data data/zs fixtures/zs.json
 """
 
 from __future__ import annotations

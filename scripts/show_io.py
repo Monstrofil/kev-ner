@@ -1,6 +1,6 @@
 """Print what a trained kev-ner model actually consumes and emits for one sentence — no JSON anywhere.
 
-    python show_io.py out/ner-kev-q3-4b-bidir --base Qwen/Qwen3-4B-Base --bidir-doc --threshold -2.0 \
+    python -m scripts.show_io results/ner-kev-q3-4b-bidir --base Qwen/Qwen3-4B-Base --bidir-doc --threshold -2.0 \
         --text "Angela Merkel met Microsoft executives in Berlin."
 """
 
@@ -15,7 +15,7 @@ import torch
 from peft import PeftModel
 from transformers import AutoModel, AutoTokenizer
 
-from kev_ner import KevNer, Packed, SpanHead, collate, decode, to
+from kev.ner import KevNer, Packed, SpanHead, collate, decode, to
 
 
 def main() -> None:

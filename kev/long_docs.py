@@ -2,7 +2,7 @@
 tokens, gold offsets shifted with them. Every length holds the same sentences and entities, so F1 is
 comparable across lengths; only how much text a model reads at once changes.
 
-    python long_docs.py fixtures/uner-en.json fixtures/uner-long.json --lengths 512 1024 2048 4096
+    python -m kev.long_docs fixtures/uner-en.json fixtures/uner-long.json --lengths 512 1024 2048 4096
 """
 
 from __future__ import annotations

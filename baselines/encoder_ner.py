@@ -1,9 +1,9 @@
 """Reference: the standard fine-tuned encoder tagger (BIO token classification), same fixture and scorer.
 
-``--long`` also scores the long-document fixture (``long_docs.py``) the way a 512-token encoder must read
+``--long`` also scores the long-document fixture (``kev.long_docs``) the way a 512-token encoder must read
 it: overlapping windows, each token labelled by the window where it sits furthest from an edge.
 
-    python encoder_ner.py fixtures/uner-en.json --out out/roberta-large --long fixtures/uner-long.json
+    python -m baselines.encoder_ner fixtures/uner-en.json --out results/roberta-large --long fixtures/uner-long.json
 """
 
 from __future__ import annotations
@@ -18,7 +18,7 @@ from pathlib import Path
 import torch
 from transformers import AutoModelForTokenClassification, AutoTokenizer
 
-from uner import line, score
+from kev.uner import line, score
 
 
 def labels_of(text: str, entities: list[list], offsets: list[tuple[int, int]], tags: dict) -> list[int]:

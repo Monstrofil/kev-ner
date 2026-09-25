@@ -1,7 +1,20 @@
-data/
+# Python
 __pycache__/
-*.pt
-adapter/
-model/
+*.py[cod]
+*.egg-info/
+.venv/
+build/
+dist/
+
+# Raw third-party downloads (see README "Quickstart")
+data/
+
+# Fixtures built locally from third-party data; not redistributed
 fixtures/uner-*.json
 fixtures/zs.json
+
+# Trained weights; results/ keeps only reports and predictions
+*.pt
+*.safetensors
+adapter/
+model/

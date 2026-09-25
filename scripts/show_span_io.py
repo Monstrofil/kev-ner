@@ -1,7 +1,7 @@
 """Dump what a trained kev-span model reads and emits for chosen units, as JSON (for the results page).
 
-    python show_span_io.py fixtures/run-21.json out/kev-1.5b --base Qwen/Qwen2.5-1.5B \
-        --temperature 2.5 --bias -1.0 --units 03d0cef0f946 0908aaa1501d:2 04cef6491219:1 > out/span-io.json
+    python -m scripts.show_span_io fixtures/run-21.json results/kev-1.5b --base Qwen/Qwen2.5-1.5B \
+        --temperature 2.5 --bias -1.0 --units 03d0cef0f946 0908aaa1501d:2 04cef6491219:1 > results/span-io.json
 
 A unit is picked by id prefix, optionally ``:annex_no`` when one document has several annexes.
 """
@@ -17,8 +17,8 @@ import torch
 from peft import PeftModel
 from transformers import AutoModel, AutoTokenizer
 
-from common import field_ok
-from kev_span import KevSpan, Packed, PointerHeads, best_span, collate, decide, to
+from kev.field_task import field_ok
+from kev.span import KevSpan, Packed, PointerHeads, best_span, collate, decide, to
 
 
 def main() -> None:
